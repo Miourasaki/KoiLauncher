@@ -1,0 +1,24 @@
+.btn {
+  --btn-background: #3c3938;
+  --btn-shadow-right: rgba(255, 255, 255, .24);
+  --btn-shadow-left: rgba(0, 0, 0, .24);
+  background: var(--btn-background);
+  box-shadow: 0 4px 0 0 var(--btn-shadow-right) inset, -4px 0 0 0 var(--btn-shadow-right) inset, 0 -4px 0 0 var(--btn-shadow-left) inset, 4px 0 0 0 var(--btn-shadow-left) inset;
+  font-size: 0.95rem;
+}
+
+.btn.green {
+  --btn-background: #8f7a42;
+}
+.btn.purple {
+  --btn-background: #7b3c55;
+}
+
+
+
+.btn:focus {
+  outline: 1px solid #90a3ff;
+}
+.btn:hover {
+  outline: 1px solid #a0e081;
+}

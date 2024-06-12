@@ -1,4 +1,4 @@
-@import './base.css';
+/*@import './base.css';*/
 
 #root {
   width: 100vw;
@@ -11,9 +11,17 @@ body {
   overflow: hidden;
 }
 
+* {
+  user-select: none;
+}
+*:focus-visible {
+  outline: 1px dashed gray;
+}
+
 .drag {
   -webkit-app-region: drag
 }
 .drag button {
   -webkit-app-region: no-drag;
 }
+

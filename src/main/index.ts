@@ -3,13 +3,17 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 
+let mainWindow: BrowserWindow
+
 function createWindow(): void {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 960,
-    height: 660,
-    minWidth: 660,
-    minHeight: 560,
+  mainWindow = new BrowserWindow({
+    width: 900,
+    height: 600,
+    minWidth: 900,
+    minHeight: 600,
+    resizable: false,
+    maximizable: false,
     show: false,
     frame: false,
     autoHideMenuBar: true,
@@ -26,16 +30,16 @@ function createWindow(): void {
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url)
+    shell.openExternal(details.url).then(() => {})
     return { action: 'deny' }
   })
 
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
+    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL']).then(() => {})
   } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+    mainWindow.loadFile(join(__dirname, '../renderer/index.html')).then(() => {})
   }
 }
 
@@ -44,7 +48,7 @@ function createWindow(): void {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   // Set app user model id for windows
-  electronApp.setAppUserModelId('com.electron')
+  electronApp.setAppUserModelId('net.miourasaki.koil')
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
@@ -54,8 +58,19 @@ app.whenReady().then(() => {
   })
 
   // IPC test
-  ipcMain.on('ping', () => console.log('pong'))
   ipcMain.on('close', () => app.quit())
+  ipcMain.on('openResizable', () => {
+    mainWindow.setResizable(true)
+    mainWindow.setMaximizable(true)
+  })
+  ipcMain.on('closeResizable', () => {
+    mainWindow.setResizable(false)
+    mainWindow.setMaximizable(false)
+  })
+  ipcMain.on('setSize', (_event, args) => {
+    mainWindow.setSize(args[0], args[1])
+    mainWindow.setMinimumSize(900, 600)
+  })
 
   createWindow()
 
