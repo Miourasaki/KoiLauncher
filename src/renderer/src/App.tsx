@@ -5,9 +5,9 @@ import MainHeader from "./components/MainHeader";
 function App(): JSX.Element {
 
   return (<>
-    <MainHeader />
     <Routes>
-      <Route index element={<Index />} />
+      <Route path={"/app/*"} element={<MainHeader />} />
+      <Route path={"/*"} element={<Index />} />
     </Routes>
   </>)
 }

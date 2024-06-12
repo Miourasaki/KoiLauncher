@@ -8,15 +8,10 @@ function createWindow(): void {
   const mainWindow = new BrowserWindow({
     width: 960,
     height: 660,
-    minWidth: 960,
-    minHeight: 660,
+    minWidth: 660,
+    minHeight: 560,
     show: false,
-    titleBarStyle: 'hidden',
-    titleBarOverlay: {
-      color: '#24292e',
-      symbolColor: '#74b1be',
-      height: 31,
-    },
+    frame: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
@@ -60,6 +55,7 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
+  ipcMain.on('close', () => app.quit())
 
   createWindow()
 
