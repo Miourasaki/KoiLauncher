@@ -3,6 +3,7 @@ import Loading from '../components/Loading'
 import { Route, Routes, useNavigate } from 'react-router-dom'
 import Login from './auth/Login'
 import { useEffect } from 'react'
+import loginBackground from '../assets/img/loginBackground.webp'
 
 function App(): JSX.Element {
   const Index = () => {
@@ -47,13 +48,12 @@ function App(): JSX.Element {
           <Route path={'/auth/login'} element={<Login />} />
         </Routes>
       </div>
-      <span className={`w-full h-full absolute top-0 left-0 -z-10 flex items-end justify-center`}>
-        <div
-          style={{ backgroundImage: 'url(/assets/img/loginBackground.webp)' }}
-          className={`w-full h-full bg-cover bg-no-repeat bg-center`}
-        >
-          {/*<div className={`w-full h-full bg-white bg-opacity-10 backdrop-blur-sm`}></div>*/}
-        </div>
+      <span
+        className={`w-full h-full absolute top-0 left-0 -z-10 flex items-end justify-center pointer-events-none`}
+      >
+        <img src={loginBackground} alt={''} className={`w-full h-full`} />
+        {/*<div className={`w-full h-full bg-white bg-opacity-10 backdrop-blur-sm`}></div>*/}
+        {/*</div>*/}
       </span>
     </main>
   )

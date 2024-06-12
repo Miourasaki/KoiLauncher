@@ -1,9 +1,9 @@
 {
-  "name": "Application",
+  "name": "koil",
   "version": "1.1.154",
   "description": "An Electron application with React and TypeScript",
   "main": "./out/main/index.js",
-  "author": "miourasaki.net",
+  "author": "Miourasaki.NET",
   "homepage": "https://miourasaki.net",
   "scripts": {
     "format": "prettier --write .",
