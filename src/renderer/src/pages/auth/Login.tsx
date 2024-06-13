@@ -8,23 +8,27 @@ const Login = () => {
 
   const [login, setLogin] = useState(false)
 
-  document.addEventListener('keydown', (e) => {
-    if (login) e.preventDefault()
-  })
-
   const loginMs = (): void => {
     setLogin(true)
+    const loginKeydownListener = (e: Event): void => {
+      e.preventDefault()
+    }
+    document.addEventListener('keydown', loginKeydownListener)
     window.electron.ipcRenderer.send('oauth:ms-in')
     window.electron.ipcRenderer.removeAllListeners('oauth:ms-out')
 
     window.electron.ipcRenderer.on('oauth:ms-out', (_event, msg) => {
-      const args = msg.split(':')
-      if (args[0] == 'error') {
-        alert(`error occurred: ${args[1]}`)
+      if (typeof msg === 'string') {
+        const args = msg.split(':')
+        if (args[0] == 'error') {
+          alert(`error occurred: ${args[1]}`)
+          setLogin(false)
+          document.removeEventListener('keydown', loginKeydownListener)
+        }
+      } else {
+        console.log(msg)
         setLogin(false)
-      } else if (args[0] == 'token') {
-        alert(args[1])
-        setLogin(false)
+        document.removeEventListener('keydown', loginKeydownListener)
       }
     })
   }
