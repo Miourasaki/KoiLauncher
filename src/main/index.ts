@@ -1,47 +1,9 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
-import { join } from 'path'
-import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
-
-let mainWindow: BrowserWindow
-
-function createWindow(): void {
-  // Create the browser window.
-  mainWindow = new BrowserWindow({
-    width: 900,
-    height: 600,
-    minWidth: 900,
-    minHeight: 600,
-    resizable: false,
-    maximizable: false,
-    show: false,
-    frame: false,
-    autoHideMenuBar: true,
-    ...(process.platform === 'linux' ? { icon } : {}),
-    webPreferences: {
-      preload: join(__dirname, '../preload/index.js'),
-      nodeIntegration: true,
-      sandbox: false
-    }
-  })
-
-  mainWindow.on('ready-to-show', () => {
-    mainWindow.show()
-  })
-
-  mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url).then(() => {})
-    return { action: 'deny' }
-  })
-
-  // HMR for renderer base on electron-vite cli.
-  // Load the remote URL for development or the local html file for production.
-  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL']).then(() => {})
-  } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html')).then(() => {})
-  }
-}
+import { app, BrowserWindow, dialog, ipcMain } from 'electron'
+import { electronApp, optimizer } from '@electron-toolkit/utils'
+import path from 'node:path'
+import { createWindow, mainWindow } from './mainWindow'
+import { aboutWindow, createAboutWindow, createLicenseWindow, licenseWindow } from './aboutWindow'
+import microsoftLogin from './microsoftLogin'
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -49,6 +11,30 @@ function createWindow(): void {
 app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId('net.miourasaki.koil')
+
+  if (process.defaultApp) {
+    if (process.argv.length >= 2) {
+      app.setAsDefaultProtocolClient('koil', process.execPath, [path.resolve(process.argv[1])])
+    }
+  } else {
+    app.setAsDefaultProtocolClient('koil')
+  }
+
+  app.on('second-instance', (_event, commandLine) => {
+    // 用户正在尝试运行第二个实例，我们需要让焦点指向我们的窗口
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.focus()
+    }
+    // 命令行是一个字符串数组，其中最后一个元素是深度链接的URL。
+    // mainWindow.webContents.send('deeplink:push', `${commandLine.pop()}`)
+    dialog.showErrorBox('Welcome Back', `You arrived from: ${commandLine.pop()}`)
+  })
+
+  // 创建主窗口，加载应用程序的其他部分，等等...
+  app.whenReady().then(() => {
+    createWindow()
+  })
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
@@ -58,16 +44,40 @@ app.whenReady().then(() => {
   })
 
   // IPC test
-  ipcMain.on('close', () => app.quit())
-  ipcMain.on('openResizable', () => {
+  ipcMain.on('oauth:ms-in', microsoftLogin)
+
+  ipcMain.on('window:close', () => app.quit())
+  ipcMain.on('window:openAbout', () => {
+    if (!aboutWindow) createAboutWindow()
+    else {
+      try {
+        aboutWindow.isClosable()
+      } catch (e) {
+        createAboutWindow()
+      }
+    }
+  })
+  ipcMain.on('window:closeAbout', () => aboutWindow.close())
+  ipcMain.on('window:openLicense', () => {
+    if (!licenseWindow) createLicenseWindow()
+    else {
+      try {
+        licenseWindow.isClosable()
+      } catch (e) {
+        createLicenseWindow()
+      }
+    }
+  })
+  ipcMain.on('window:closeLicense', () => licenseWindow.close())
+  ipcMain.on('window:openResizable', () => {
     mainWindow.setResizable(true)
     mainWindow.setMaximizable(true)
   })
-  ipcMain.on('closeResizable', () => {
+  ipcMain.on('window:closeResizable', () => {
     mainWindow.setResizable(false)
     mainWindow.setMaximizable(false)
   })
-  ipcMain.on('setSize', (_event, args) => {
+  ipcMain.on('window:setSize', (_event, args) => {
     mainWindow.setSize(args[0], args[1])
     mainWindow.setMinimumSize(900, 600)
   })

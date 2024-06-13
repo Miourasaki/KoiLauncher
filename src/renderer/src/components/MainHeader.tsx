@@ -1,6 +1,16 @@
 import { useState } from 'react'
 
-const MainHeader = () => {
+const MainHeader = ({
+  title = 'Koi Launcher',
+  openAbout = false,
+  close,
+  color = '#212121'
+}: {
+  title?: string
+  openAbout?: boolean
+  close?: () => void
+  color?: string
+}) => {
   const [openHeader, setOpenHeader] = useState(true)
 
   const BarStartItems = () => {
@@ -16,13 +26,16 @@ const MainHeader = () => {
   const BarCenterItems = () => {
     return (
       <div className={`flex w-auto px-3 h-full items-center justify-center mt-[0.05rem]`}>
-        Koi Launcher
+        {title}
       </div>
     )
   }
 
   const BarEndItems = () => {
-    const ipcHandle = (): void => window.electron.ipcRenderer.send('close')
+    const ipcHandle = (): void => {
+      if (close) close()
+      else window.electron.ipcRenderer.send('window:close')
+    }
 
     return (
       <div className={`flex w-full h-full items-center justify-end`}>
@@ -49,7 +62,8 @@ const MainHeader = () => {
     return (
       <button
         onClick={() => {
-          setOpenHeader(!openHeader)
+          if (openAbout) window.electron.ipcRenderer.send('window:openAbout')
+          else setOpenHeader(!openHeader)
         }}
         className={`w-10 h-full transition-all flex items-center justify-center
         hover:bg-white fill-white hover:fill-black group`}
@@ -126,7 +140,8 @@ const MainHeader = () => {
   if (openHeader) {
     return (
       <header
-        className={`w-full min-h-7 bg-[#24292e] drag
+        style={{ background: color }}
+        className={`w-full min-h-7 drag absolute z-50
     grid grid-cols-3 grid-rows-subgrid text-white text-xs`}
       >
         <BarStartItems />
@@ -138,7 +153,7 @@ const MainHeader = () => {
     return (
       <>
         <header
-          className={`w-full min-h-7 drag
+          className={`w-full min-h-7 drag absolute z-50
         grid text-white text-xs`}
         >
           <BarStartItems />
@@ -146,6 +161,7 @@ const MainHeader = () => {
       </>
     )
   }
+
 }
 
 export default MainHeader

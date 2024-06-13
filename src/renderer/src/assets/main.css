@@ -21,7 +21,45 @@ body {
 .drag {
   -webkit-app-region: drag
 }
-.drag button {
+.drag button,
+.drag a {
   -webkit-app-region: no-drag;
 }
 
+
+.fade-enter {
+  transform: translateX(100%);
+}
+
+.fade-enter-active {
+  transform: translateX(0);
+  transition: all 200ms ease-in;
+}
+
+.fade-exit {
+  transform: translateX(0);
+}
+
+.fade-exit-active {
+  transform: translateX(-100%);
+  transition: all 200ms ease-in;
+}
+
+*:focus-visible {
+  outline: 2px dotted #831843;
+}
+
+
+.licence body {
+  font-family: 'Times New Roman';
+  font-size: 12pt
+}
+
+.licence p {
+  margin: 0pt
+}
+
+.licence li {
+  margin-top: 0pt;
+  margin-bottom: 0pt
+}

@@ -1,6 +1,6 @@
 {
   "name": "koil",
-  "version": "1.1.154",
+  "version": "0.0.155",
   "description": "An Electron application with React and TypeScript",
   "main": "./out/main/index.js",
   "author": "Miourasaki.NET",
@@ -24,16 +24,21 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/utils": "^3.0.0",
+    "axios": "^1.7.2",
     "electron-updater": "^6.1.7",
-    "react-router-dom": "^6.23.1"
+    "qs": "^6.12.1",
+    "react-router-dom": "^6.23.1",
+    "react-transition-group": "^4.4.5"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",
     "@electron-toolkit/eslint-config-ts": "^1.0.1",
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@types/node": "^18.19.9",
+    "@types/qs": "^6.9.15",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
+    "@types/react-transition-group": "^4.4.10",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "^10.4.19",
     "electron": "^28.2.0",
