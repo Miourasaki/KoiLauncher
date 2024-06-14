@@ -61,10 +61,13 @@ const microsoftLogin = (event: Electron.IpcMainEvent): void => {
       msWindow.show()
       mainWindow.on('move', changMsWindowPosition)
     })
-    .catch(() => {})
+    .catch(() => {
+      msWindowOff()
+      event.reply('oauth:ms-out', 'error:i18n|error.msAccount.window.networkError')
+    })
   const msClose = (): void => {
     msWindowOff()
-    event.reply('oauth:ms-out', 'error:Window Be Close')
+    event.reply('oauth:ms-out', 'error:none|Window Be Close')
   }
   const msWindowOff = () => {
     mainWindow.off('move', changMsWindowPosition)
@@ -88,7 +91,7 @@ const microsoftLogin = (event: Electron.IpcMainEvent): void => {
         msWindow.close()
         const tokenCode = windowUrl.searchParams.get('code')
         if (tokenCode)
-          getMinecraftToken(tokenCode, '')
+          getMinecraftProfile(tokenCode, '')
             .then((r) => event.reply('oauth:ms-out', r))
             .catch((r) => event.reply('oauth:ms-out', `error:${r}`))
       } else if (
@@ -97,16 +100,14 @@ const microsoftLogin = (event: Electron.IpcMainEvent): void => {
       ) {
         msWindowOff()
         msWindow.close()
-        event.reply('oauth:ms-out', `error:${windowUrl.searchParams.get('error_description')}`)
+        event.reply('oauth:ms-out', `error:none|${windowUrl.searchParams.get('error_description')}`)
       }
     }
   }
 }
 const log = (s: string = ''): void => {
-  if (typeof s == 'boolean') console.log(s)
+  if (typeof s == 'string') console.log(s)
 }
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 const getMicrosoftToken = (code: string): Promise<Map<string, string>> => {
   log('Minecraft Token get Program Start')
   return new Promise((resolve, rejects) => {
@@ -147,111 +148,133 @@ const getMicrosoftToken = (code: string): Promise<Map<string, string>> => {
   })
 }
 
-const getMinecraftToken = (code: string = '', refreshToken: string = ''): Promise<any> => {
+const getMinecraftProfile = (code: string = '', refreshToken: string = ''): Promise<any> => {
   return new Promise((resolve, reject) => {
     if (code != '') {
       getMicrosoftToken(code)
         .then((r) =>
           mainDef(r)
-            .then((result) => resolve(result))
-            .catch((err) => reject(err))
+            .then((r) => resolve(r))
+            .catch((e) => reject(e))
         )
         .catch((e) => reject(e))
     } else if (refreshToken != '') {
       getMicrosoftToken(code)
         .then((r) =>
           mainDef(r)
-            .then((result) => resolve(result))
-            .catch((err) => reject(err))
+            .then((r) => resolve(r))
+            .catch((e) => reject(e))
         )
         .catch((e) => reject(e))
     }
 
     const mainDef = (msToken: Map<string, string>): Promise<any> => {
       return new Promise((resolve, reject) => {
-        const headersGetXboxToken = new Headers()
-        headersGetXboxToken.append('Content-Type', 'application/json')
-        headersGetXboxToken.append('Accept', 'application/json')
-        headersGetXboxToken.append('User-Agent', `KoiLauncher/${process.env.npm_package_version}`)
-        log('- get xbox token start from MS Assess TOKEN')
-        fetch('https://user.auth.xboxlive.com/user/authenticate', {
+        getMinecraftToken(`${msToken.get('access_token')}`)
+          .then((result) => {
+            // axios
+            //   .get('https://api.minecraftservices.com/entitlements/mcstore', {
+            //     headers: {
+            //       Authorization: `Bearer ${result.access_token}`
+            //     }
+            //   })
+            //   .then(() => {
+            resolve({
+              microsoftRefreshToken: msToken.get('refresh_token'),
+              minecraftMeta: {
+                tokenMeta: result
+              }
+            })
+            // })
+            // .catch(() => reject('i18n|error.msAccount.minecraft.notOwned'))
+          })
+          .catch((err) => reject(err))
+      })
+    }
+  })
+}
+
+const getMinecraftToken = (msAccessToken: string): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    const headersGetXboxToken = new Headers()
+    headersGetXboxToken.append('Content-Type', 'application/json')
+    headersGetXboxToken.append('Accept', 'application/json')
+    headersGetXboxToken.append('User-Agent', `KoiLauncher/${process.env.npm_package_version}`)
+    log('- get xbox token start from MS Assess TOKEN')
+    fetch('https://user.auth.xboxlive.com/user/authenticate', {
+      method: 'POST',
+      headers: headersGetXboxToken,
+      redirect: 'follow',
+      body: JSON.stringify({
+        Properties: {
+          AuthMethod: 'RPS',
+          SiteName: 'user.auth.xboxlive.com',
+          RpsTicket: `${msAccessToken}` // 第二步中获取的访问令牌
+        },
+        RelyingParty: 'http://auth.xboxlive.com',
+        TokenType: 'JWT'
+      })
+    })
+      .then((r) => r.json())
+      .then((result) => {
+        if (result.Token == null) reject('i18n|error.msAccount.xbox.unregistered')
+        const xboxToken = result.Token
+        const xboxUserHash = result.DisplayClaims.xui[0].uhs
+        log('| xboxToken - ' + xboxToken)
+        log('| xboxUserHash - ' + xboxUserHash)
+        log('- get xbox token token done')
+        log()
+
+        log('- get xsts token start from xbox token')
+        fetch('https://xsts.auth.xboxlive.com/xsts/authorize', {
           method: 'POST',
           headers: headersGetXboxToken,
           redirect: 'follow',
           body: JSON.stringify({
             Properties: {
-              AuthMethod: 'RPS',
-              SiteName: 'user.auth.xboxlive.com',
-              RpsTicket: `${msToken.get('access_token')}` // 第二步中获取的访问令牌
+              SandboxId: 'RETAIL',
+              UserTokens: [
+                xboxToken // 上面得到的XBL令牌
+              ]
             },
-            RelyingParty: 'http://auth.xboxlive.com',
+            RelyingParty: 'rp://api.minecraftservices.com/',
             TokenType: 'JWT'
           })
         })
           .then((r) => r.json())
           .then((result) => {
-            const xboxToken = result.Token
-            const xboxUserHash = result.DisplayClaims.xui[0].uhs
-            log('| xboxToken - ' + xboxToken)
-            log('| xboxUserHash - ' + xboxUserHash)
-            log('- get xbox token token done')
+            if (result.Token == null) reject('i18n|error.msAccount.xbox.unregistered')
+            const xstsToken = result.Token
+            const xstsUserHash = result.DisplayClaims.xui[0].uhs
+            log('| xstsToken - ' + xstsToken)
+            log('| xstsUserHash - ' + xstsUserHash)
+            log('- get xsts token token done')
             log()
 
-            log('- get xsts token start from xbox token')
-            fetch('https://xsts.auth.xboxlive.com/xsts/authorize', {
+            const xblAccessToken = `XBL3.0 x=${xstsUserHash};${xstsToken}`
+            log(`- get minecraft assess token start from xsts token`)
+            fetch('https://api.minecraftservices.com/authentication/login_with_xbox', {
               method: 'POST',
               headers: headersGetXboxToken,
               redirect: 'follow',
               body: JSON.stringify({
-                Properties: {
-                  SandboxId: 'RETAIL',
-                  UserTokens: [
-                    xboxToken // 上面得到的XBL令牌
-                  ]
-                },
-                RelyingParty: 'rp://api.minecraftservices.com/',
-                TokenType: 'JWT'
+                identityToken: xblAccessToken
               })
             })
               .then((r) => r.json())
               .then((result) => {
-                const xstsToken = result.Token
-                const xstsUserHash = result.DisplayClaims.xui[0].uhs
-                log('| xstsToken - ' + xstsToken)
-                log('| xstsUserHash - ' + xstsUserHash)
-                log('- get xsts token token done')
+                if (result.access_token == null) reject('i18n|error.msAccount.minecraft.notOwned')
+                const accessToken = result.access_token
+                log('| accessToken - ' + accessToken)
+                log('- All Down, Back Token')
                 log()
-
-                const xblAccessToken = `XBL3.0 x=${xstsUserHash};${xstsToken}`
-                log(`- get minecraft assess token start from xsts token ${xblAccessToken}`)
-                fetch('https://api.minecraftservices.com/authentication/login_with_xbox', {
-                  method: 'POST',
-                  headers: headersGetXboxToken,
-                  redirect: 'follow',
-                  body: JSON.stringify({
-                    identityToken: xblAccessToken
-                  })
-                })
-                  .then((r) => r.json())
-                  .then((result) => {
-                    const accessToken = result.access_token
-                    log('| accessToken - ' + accessToken)
-                    log('- All Down, Back Token')
-                    log()
-                    resolve({
-                      microsoftRefreshToken: msToken.get('refresh_token'),
-                      minecraftMeta: {
-                        tokenMeta: result
-                      }
-                    })
-                  })
-                  .catch((e) => reject(e))
+                resolve(result)
               })
-              .catch((e) => reject(e))
+              .catch(() => reject('i18n|error.msAccount.minecraft.notOwned'))
           })
-          .catch((e) => reject(e))
+          .catch(() => reject('i18n|error.msAccount.xbox.unregistered'))
       })
-    }
+      .catch(() => reject('i18n|error.msAccount.xbox.unregistered'))
   })
 }
 export default microsoftLogin

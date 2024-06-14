@@ -46,9 +46,8 @@ body {
 }
 
 *:focus-visible {
-  outline: 2px dotted #831843;
+  outline: 2px dotted #fff;
 }
-
 
 .licence body {
   font-family: 'Times New Roman';
@@ -62,4 +61,9 @@ body {
 .licence li {
   margin-top: 0pt;
   margin-bottom: 0pt
+}
+
+
+.ofhide::-webkit-scrollbar {
+  width: 0px;
 }

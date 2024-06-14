@@ -44,7 +44,7 @@ export function createAboutWindow(): void {
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    aboutWindow.loadURL(`${process.env['ELECTRON_RENDERER_URL']}#/about`).then(() => {})
+    aboutWindow.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/about.html`).then(() => {})
   } else {
     aboutWindow.loadFile(join(__dirname, '../renderer/about.html')).then(() => {})
   }
@@ -82,7 +82,7 @@ export function createLicenseWindow(): void {
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    licenseWindow.loadURL(`${process.env['ELECTRON_RENDERER_URL']}#/license`).then(() => {})
+    licenseWindow.loadURL(`${process.env['ELECTRON_RENDERER_URL']}/license.html`).then(() => {})
   } else {
     licenseWindow.loadFile(join(__dirname, '../renderer/license.html')).then(() => {})
   }

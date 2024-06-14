@@ -29,7 +29,7 @@ function App(): JSX.Element {
       <MainHeader openAbout={true} />
       <div className={`w-full h-full flex-grow flex items-center justify-center`}>
         <div
-          className={`min-w-[31rem] min-h-[21rem] flex items-center justify-center mb-3 overflow-hidden `}
+          className={`min-w-[32rem] min-h-[21rem] flex items-center justify-center mb-3 overflow-hidden `}
           style={{ background: 'rgb(33, 33, 33)' }}
         >
           <SwitchTransition>

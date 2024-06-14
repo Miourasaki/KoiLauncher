@@ -1,0 +1,91 @@
+.notification {
+  width: 330px;
+  max-width: 330px;
+  max-height: 100px;
+  min-height: 36px;
+  overflow: hidden;
+  z-index: 50;
+  position: relative;
+  color: #fff;
+  transition: transform .3s ease-out;
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateX(100%)
+  }
+  70% {
+    transform: translateX(60%)
+  }
+  100% {
+    transform: translateX(0)
+  }
+}
+
+.notification.slideIn {
+  animation-name: slideIn;
+  animation-duration: 0.2s;
+  animation-timing-function: ease-in;
+}
+
+.notification.slideOut {
+  transform: translateX(150%);
+  flex: 0;
+}
+@keyframes close {
+  from {
+    height: 100px;
+  }
+  to {
+    height: 0;
+  }
+}
+.notification.close {
+  animation-name: close;
+  animation-fill-mode: forwards;
+  animation-delay: 0.2s;
+  animation-duration: 0.1s;
+  animation-timing-function: ease-in;
+}
+.notification .closeButton {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  height: 16px;
+  transform: translateY(-50%);
+  background: transparent;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  outline: none;
+}
+
+.notification:not(:last-child) {
+  margin-bottom: 8px;
+}
+.notification .bar.none {
+  background-color: #ffffff00;
+}
+
+.notification .bar.info {
+  background-color: #5151ff;
+}
+
+.notification .bar.success {
+  background-color: #9bcc91;
+}
+
+.notification .bar.warning {
+  background-color: #fffb00;
+}
+
+.notification .bar.error {
+  background-color: #ff0b00;
+}
+
+.container {
+  position: fixed;
+  top: 1rem;
+  right: 16px;
+}

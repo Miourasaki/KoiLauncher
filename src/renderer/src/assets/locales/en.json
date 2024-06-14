@@ -1,0 +1,12 @@
+{
+  "login.title": "Add Account",
+  "login.microsoft": "WITH MICROSOFT",
+  "login.uim": "WITH MIOSEIYA",
+  "login.other": "USE\tANOTHER\tOR\tSETUP LATER",
+
+  "error.msAccount.window.networkError": "Unable to link Microsoft Oauth program, please check network connection.",
+  "error.msAccount.xbox.unregistered": "Xbox Live service is not enabled for this Microsoft account.",
+  "error.msAccount.minecraft.notOwned": "This Microsoft account has not purchased Minecraft Java edition.",
+
+  "meta.building": "In development..."
+}

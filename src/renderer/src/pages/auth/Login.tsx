@@ -1,47 +1,62 @@
 import './Login.css'
 import { useNavigate } from 'react-router-dom'
 import Loading from '../../components/Loading'
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { NotificationContextCore } from '../../components/notify/NotificationContext'
+import { Card } from '../../components/notify/Notification'
+import { useTranslation } from 'react-i18next'
 
 const Login = () => {
   const push = useNavigate()
-
+  const { t } = useTranslation()
+  const { createNotification } = useContext(NotificationContextCore)
   const [login, setLogin] = useState(false)
-
   const loginMs = (): void => {
     setLogin(true)
-    const loginKeydownListener = (e: Event): void => {
-      e.preventDefault()
-    }
-    document.addEventListener('keydown', loginKeydownListener)
     window.electron.ipcRenderer.send('oauth:ms-in')
-    window.electron.ipcRenderer.removeAllListeners('oauth:ms-out')
+  }
 
+  useEffect(() => {
     window.electron.ipcRenderer.on('oauth:ms-out', (_event, msg) => {
+      let closeTime = 0
       if (typeof msg === 'string') {
         const args = msg.split(':')
         if (args[0] == 'error') {
-          alert(`error occurred: ${args[1]}`)
-          setLogin(false)
-          document.removeEventListener('keydown', loginKeydownListener)
+          const textArgs = args[1].split('|')
+          if (textArgs.length > 1) {
+            if (textArgs[0] == 'i18n') {
+              createNotification(Card.error, t(textArgs[1]))
+            } else if (textArgs[0] == 'none') {
+              closeTime = Math.random() * 1000 + 500
+            }
+          } else {
+            createNotification(Card.error, `${t('error.prefix')}: ${args[1]}`)
+          }
         }
       } else {
         console.log(msg)
-        setLogin(false)
-        document.removeEventListener('keydown', loginKeydownListener)
       }
+      setTimeout(() => {
+        setLogin(false)
+      }, closeTime)
     })
-  }
 
+    return () => {
+      window.electron.ipcRenderer.removeAllListeners('oauth:ms-out')
+    }
+  }, [])
+
+  const other = t('login.other').split('\t')
   return (
     <>
       <div
-        className={`px-20 items-center justify-center gap-9
-      flex flex-col text-white`}
+        className={`px-24 items-center justify-center gap-9
+      flex flex-col text-white w-full`}
       >
-        <div className={`font-medium text-2xl tracking-[0.2rem] uppercase`}>登录 | Login</div>
+        <div className={`font-medium text-2xl tracking-[0.2rem] uppercase`}>{t('login.title')}</div>
         <div className={`flex flex-col gap-3.5 w-full`}>
           <button
+            disabled={login}
             onClick={loginMs}
             className={`btn w-full h-10 btn-outline-green green tracking-wide flex px-20 items-center justify-between`}
           >
@@ -55,9 +70,10 @@ const Login = () => {
             >
               <path d="M7.462 0H0v7.19h7.462zM16 0H8.538v7.19H16zM7.462 8.211H0V16h7.462zm8.538 0H8.538V16H16z" />
             </svg>
-            <div>使用Microsoft登录</div>
+            <div>{t('login.microsoft')}</div>
           </button>
           <button
+            disabled={true}
             className={`btn-g relative w-full h-10 btn-outline-green green tracking-wide flex px-20 items-center justify-between`}
           >
             <svg
@@ -106,29 +122,30 @@ const Login = () => {
 	l3.2-2.4L903.8,386.6z M784.3,284.4c14.3,12.3,61.6,52.2,88.8,75.7l-3.3,2.5l-20.4,15.2l-90.7-78.6L784.3,284.4z"
               />
             </svg>
-            <div>使用UIM系统登录</div>
+            <div>{t('login.uim')}</div>
             <span
-              className={`absolute w-full h-full top-0 left-0 bg-stone-800 bg-opacity-75 flex justify-center items-center`}
+              className={`absolute w-full h-full top-0 left-0 bg-stone-800 bg-opacity-75 flex justify-center items-center text-gray-400`}
             >
-              构建中...
+              {/*{t('meta.building')}*/}
             </span>
           </button>
         </div>
         <button
+          disabled={login}
           onClick={() => {
             localStorage.setItem('tokenType', 'offline')
             push('/')
           }}
           className={`btn w-full h-10`}
         >
-          使用 <span className={`text-stone-400`}>离线账号</span> 或{' '}
-          <span className={`text-stone-400`}>更多设置</span>
+          {other[0]} <span className={`text-stone-400`}>{other[1]}</span> {`${other[2]} `}
+          <span className={`text-stone-400`}>{other[3]}</span>
         </button>
       </div>
 
       {login && (
         <span
-          className={`w-full h-full absolute top-0 left-0 bg-stone-800 bg-opacity-75
+          className={`w-full h-full absolute top-0 left-0 bg-stone-800 bg-opacity-75 backdrop-blur-sm
         flex justify-center items-center`}
         >
           <Loading border={false} text={`...`} />
