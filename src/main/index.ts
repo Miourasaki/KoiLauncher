@@ -10,7 +10,7 @@ import microsoftLogin, { getMinecraftProfileWithRefreshToken } from './microsoft
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   const appData = app.getPath('appData')
-  app.setPath('userData', `${appData}/.minecraft/koilData`)
+  app.setPath('userData', `${appData}/Koi Launcher`)
   // Set app user model id for windows
   electronApp.setAppUserModelId('net.miourasaki.koil')
 
