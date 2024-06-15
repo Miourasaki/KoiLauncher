@@ -5,9 +5,9 @@
   "meta.account.type.microsoft": "Microsoft Account",
 
   "login.title": "Add Account",
-  "login.microsoft": "with Microsoft",
-  "login.uim": "with MioSeiYa",
-  "login.local": "with Local File",
+  "login.microsoft": "WITH Microsoft",
+  "login.uim": "WITH MioSeiYa",
+  "login.local": "WITH Local File",
   "login.other": "Use\tAnother\tor\tSetup Later",
 
   "error.msAccount.failure": "Error connecting to authentication server.",

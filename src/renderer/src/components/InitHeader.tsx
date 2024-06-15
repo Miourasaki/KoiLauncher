@@ -74,7 +74,7 @@ const InitHeader = ({
           {/*<div className={`px-3 py-2 text-xs hover:bg-[#c88f9b] hover:text-white`}>简体中文 - 中国大陆</div>*/}
         </div>
         <div
-          className={`fixed w-screen h-screen -bottom-7 left-0 bg-stone-800 z-10 bg-opacity-75 backdrop-blur-sm  ${!langMenu && 'hidden'}`}
+          className={`fixed w-screen h-screen -bottom-7 left-0 bg-stone-800 z-0 bg-opacity-75 backdrop-blur-sm  ${!langMenu && 'hidden'}`}
         ></div>
       </div>
     )
@@ -215,7 +215,7 @@ const InitHeader = ({
     return (
       <header
         style={{ background: color }}
-        className={`w-full min-h-7 drag absolute overflow-hidden
+        className={`w-full min-h-7 drag absolute overflow-hidden z-50
     grid grid-cols-3 grid-rows-subgrid text-white text-xs`}
       >
         <BarStartItems />
@@ -227,7 +227,7 @@ const InitHeader = ({
     return (
       <>
         <header
-          className={`w-full min-h-7 drag absolute
+          className={`w-full min-h-7 drag absolute z-50
         grid text-white text-xs`}
         >
           <BarStartItems />

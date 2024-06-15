@@ -124,7 +124,7 @@ const Login = (): JSX.Element => {
 
       {login && (
         <span
-          className={`w-full h-full absolute top-0 left-0 bg-stone-800 bg-opacity-75 backdrop-blur-sm
+          className={`w-full h-full absolute top-0 z-0 left-0 bg-stone-800 bg-opacity-75 backdrop-blur-sm
         flex justify-center items-center ${loginClass ? 'loginFrom' : 'loginTo'}`}
         >
           <Loading border={false} text={`...`} />
