@@ -1,15 +1,19 @@
-import ja from "./ja.json";
-import en from "./en.json";
-import zh from "./zh.json";
+import en from './en.json'
+import zh_CN from './zh-CN.json'
+import lzh from './lzh.json'
+import zh_HK from './zh-HK.json'
 
 export const resources = {
-    "en": {
-		translation: en
-	},
-    "zh": {
-		translation: zh
-	},
-	"ja": {
-		translation: ja
-	},
+  'zh-CN': {
+    translation: zh_CN
+  },
+  'lzh': {
+    translation: lzh
+  },
+  'zh-HK': {
+    translation: zh_HK
+  },
+  en: {
+    translation: en
+  }
 }

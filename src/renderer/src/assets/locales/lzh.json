@@ -1,0 +1,18 @@
+{
+  "lang": "文言 - 華夏",
+
+  "meta.building": "構建開發中...",
+
+  "login.title": "添加本地帳號",
+  "login.microsoft": "用微軟戶识审也",
+  "login.uim": "以誓约书入录",
+  "login.local": "从檄入信息。\n",
+  "login.other": "使用\t離綫賬號\t或\t稍後設置",
+
+  "error.msAccount.failure": "無法鏈接至驗證服務器.",
+  "error.msAccount.window.networkError": "無法連接至Microsoft Oauth程序，請檢查網絡連接.",
+  "error.msAccount.xbox.unregistered": "此微軟賬號Xbox Live服務.",
+  "error.msAccount.minecraft.notOwned": "此微軟賬號未購買Minecraft相關游戲.",
+
+  "info.changeLang": "更以言為"
+}

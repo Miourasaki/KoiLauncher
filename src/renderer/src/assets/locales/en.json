@@ -1,12 +1,19 @@
 {
-  "login.title": "Add Account",
-  "login.microsoft": "WITH MICROSOFT",
-  "login.uim": "WITH MIOSEIYA",
-  "login.other": "USE\tANOTHER\tOR\tSETUP LATER",
+  "lang": "English - All",
 
+  "meta.building": "In development...",
+  "meta.account.type.microsoft": "Microsoft Account",
+
+  "login.title": "Add Account",
+  "login.microsoft": "with Microsoft",
+  "login.uim": "with MioSeiYa",
+  "login.local": "with Local File",
+  "login.other": "Use\tAnother\tor\tSetup Later",
+
+  "error.msAccount.failure": "Error connecting to authentication server.",
   "error.msAccount.window.networkError": "Unable to link Microsoft Oauth program, please check network connection.",
   "error.msAccount.xbox.unregistered": "Xbox Live service is not enabled for this Microsoft account.",
-  "error.msAccount.minecraft.notOwned": "This Microsoft account has not purchased Minecraft Java edition.",
+  "error.msAccount.minecraft.notOwned": "This Microsoft account has not purchased Minecraft related games.",
 
-  "meta.building": "In development..."
+  "info.changeLang": "Chang Language to"
 }

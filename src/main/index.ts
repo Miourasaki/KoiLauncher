@@ -1,35 +1,18 @@
-import { app, BrowserWindow, dialog, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
-import path from 'node:path'
 import { createWindow, mainWindow } from './mainWindow'
 import { aboutWindow, createAboutWindow, createLicenseWindow, licenseWindow } from './aboutWindow'
-import microsoftLogin from './microsoftLogin'
+import microsoftLogin, { getMinecraftProfileWithRefreshToken } from './microsoftLogin'
+// import Store from 'electron-store'
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  const appData = app.getPath('appData')
+  app.setPath('userData', `${appData}/.minecraft/koilData`)
   // Set app user model id for windows
   electronApp.setAppUserModelId('net.miourasaki.koil')
-
-  if (process.defaultApp) {
-    if (process.argv.length >= 2) {
-      app.setAsDefaultProtocolClient('koil', process.execPath, [path.resolve(process.argv[1])])
-    }
-  } else {
-    app.setAsDefaultProtocolClient('koil')
-  }
-
-  app.on('second-instance', (_event, commandLine) => {
-    // 用户正在尝试运行第二个实例，我们需要让焦点指向我们的窗口
-    if (mainWindow) {
-      if (mainWindow.isMinimized()) mainWindow.restore()
-      mainWindow.focus()
-    }
-    // 命令行是一个字符串数组，其中最后一个元素是深度链接的URL。
-    // mainWindow.webContents.send('deeplink:push', `${commandLine.pop()}`)
-    dialog.showErrorBox('Welcome Back', `You arrived from: ${commandLine.pop()}`)
-  })
 
   // 创建主窗口，加载应用程序的其他部分，等等...
   app.whenReady().then(() => {
@@ -43,10 +26,28 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
+  // const store = new Store()
+  //
+  // ipcMain.on('mainStore:set', (_, key, value) => {
+  //   store.set(key, value)
+  // })
+  //
+  // ipcMain.on('mainStore:value', (_, key) => {
+  //   const value = store.get(key)
+  //   _.returnValue = value || ''
+  // })
+
   // IPC test
   ipcMain.on('oauth:ms-in', microsoftLogin)
+  ipcMain.on('auth:ms-in', getMinecraftProfileWithRefreshToken)
 
   ipcMain.on('window:close', () => app.quit())
+  ipcMain.on('window:maximize', () => {
+    if (mainWindow.isMinimized()) mainWindow.unmaximize()
+    else mainWindow.maximize()
+  })
+  ipcMain.on('window:minimize', () => mainWindow.minimize())
+
   ipcMain.on('window:openAbout', () => {
     if (!aboutWindow) createAboutWindow()
     else {

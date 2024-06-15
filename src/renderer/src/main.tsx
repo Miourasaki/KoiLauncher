@@ -10,7 +10,6 @@ import { HashRouter } from 'react-router-dom'
 document.addEventListener('keydown', (e) => {
   if (e.key === 'F11') {
     e.preventDefault() // 尝试阻止默认行为，但可能不起作用
-    console.log('F11键被按下')
   }
 })
 

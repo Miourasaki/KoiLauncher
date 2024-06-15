@@ -3,20 +3,28 @@
   --btn-shadow-right: rgba(255, 255, 255, .24);
   --btn-shadow-left: rgba(0, 0, 0, .24);
   background: var(--btn-background);
-  box-shadow: 0 4px 0 0 var(--btn-shadow-right) inset, -4px 0 0 0 var(--btn-shadow-right) inset, 0 -4px 0 0 var(--btn-shadow-left) inset, 4px 0 0 0 var(--btn-shadow-left) inset;
+  /*box-shadow: 0 4px 0 0 var(--btn-shadow-right) inset, -4px 0 0 0 var(--btn-shadow-right) inset, 0 -4px 0 0 var(--btn-shadow-left) inset, 4px 0 0 0 var(--btn-shadow-left) inset;*/
+  box-shadow: 0 4px 0 0 var(--btn-shadow-right) inset, 0 -4px 0 0 var(--btn-shadow-left) inset;
   font-size: 0.95rem;
 }
 .btn-g {
-  --btn-background: #8f7a42;
+  --btn-background: #d98b9b;
   --btn-shadow-right: rgba(255, 255, 255, .24);
   --btn-shadow-left: rgba(0, 0, 0, .24);
   background: var(--btn-background);
-  box-shadow: 0 4px 0 0 var(--btn-shadow-right) inset, -4px 0 0 0 var(--btn-shadow-right) inset, 0 -4px 0 0 var(--btn-shadow-left) inset, 4px 0 0 0 var(--btn-shadow-left) inset;
+  box-shadow: 0 4px 0 0 var(--btn-shadow-right) inset, 0 -4px 0 0 var(--btn-shadow-left) inset;
   font-size: 0.95rem;
 }
 
 .btn.green {
   --btn-background: #8f7a42;
+}
+.btn.sakura{
+  --btn-background: #d98b9b;
+}
+.btn.gray {
+  --btn-background: #e8e4d8;
+  color: black;
 }
 .btn.purple {
   --btn-background: #7b3c55;
@@ -25,8 +33,8 @@
 
 
 .btn:focus {
-  outline: 1px solid #90a3ff;
+  outline: 1px solid #ff90c2;
 }
 .btn:hover {
-  outline: 1px solid #a0e081;
+  outline: 1px solid #ffffff;
 }

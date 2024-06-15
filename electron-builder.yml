@@ -13,6 +13,8 @@ asarUnpack:
   - resources/**
 win:
   executableName: Koi Launcher
+  target:
+    - portable
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}

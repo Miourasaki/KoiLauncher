@@ -5,6 +5,7 @@ import { useEffect } from 'react'
 import About from './pages/About'
 import License from './pages/License'
 import NotificationContext from './components/notify/NotificationContext'
+import MainContextProvider from './components/CoreContext'
 
 function App(): JSX.Element {
   useEffect(() => {
@@ -14,12 +15,14 @@ function App(): JSX.Element {
 
   return (
     <NotificationContext>
-      <Routes>
-        <Route path={'/app/*'} element={<AppIndex />} />
-        <Route path={'/*'} element={<Index />} />
-        <Route path={'/about'} element={<About />} />
-        <Route path={'/license'} element={<License />} />
-      </Routes>
+      <MainContextProvider>
+        <Routes>
+          <Route path={'/app/*'} element={<AppIndex />} />
+          <Route path={'/*'} element={<Index />} />
+          <Route path={'/about'} element={<About />} />
+          <Route path={'/license'} element={<License />} />
+        </Routes>
+      </MainContextProvider>
     </NotificationContext>
   )
 }

@@ -1,4 +1,7 @@
 import { useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
+import MainHeader from '../../components/mainHeader'
+import AppBar from "./comp/AppBar";
 
 const AppIndexPage = () => {
   const backWidth = window.localStorage.getItem('backWidth')
@@ -18,7 +21,21 @@ const AppIndexPage = () => {
     }
   }
 
-  return <div className={`drag`}>a</div>
+  useEffect(() => {}, [])
+
+  // const msAccountMeta: any = JSON.parse(atob('' + sessionStorage.getItem('accountMeta')))
+
+  return (
+    <>
+      <MainHeader />
+      <div className={`w-full h-full flex bg-[#e7c0c9]`}>
+        <AppBar />
+      </div>
+      {/*<div className={`h-7`}>Header</div>*/}
+      {/*<div>{msAccountMeta.accountType}</div>*/}
+      {/*<div>{JSON.stringify(msAccountMeta)}</div>*/}
+    </>
+  )
 }
 
 export default AppIndexPage

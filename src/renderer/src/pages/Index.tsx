@@ -1,35 +1,25 @@
-import MainHeader from '../components/MainHeader'
+import InitHeader from '../components/InitHeader'
 import Loading from '../components/Loading'
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import Login from './auth/Login'
-import { useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 // import loginBackground from '../assets/img/loginBackground.webp'
 import { CSSTransition, SwitchTransition } from 'react-transition-group'
+import { NotificationContextCore } from '../components/notify/NotificationContext'
+import { Card } from '../components/notify/Notification'
+import { MainContext } from '../components/CoreContext'
+import { useTranslation } from 'react-i18next'
+import { Decrypt } from '../components/AES'
 
 function App(): JSX.Element {
-  const Index = () => {
-    window.electron.ipcRenderer.send('window:setSize', [900, 600])
-    window.electron.ipcRenderer.send('window:closeResizable')
-
-    const p = useNavigate()
-    const push = (path: string) => setTimeout(() => p(path), 0)
-    useEffect(() => {
-      const tokenType = localStorage.getItem('tokenType')
-      if (!tokenType) {
-        push('/auth/login')
-      }
-    }, [])
-
-    return <Loading border={false} />
-  }
   const location = useLocation()
 
   return (
     <main className={`w-full h-full relative`}>
-      <MainHeader openAbout={true} />
+      <InitHeader openAbout={true} />
       <div className={`w-full h-full flex-grow flex items-center justify-center`}>
         <div
-          className={`min-w-[32rem] min-h-[21rem] flex items-center justify-center mb-3 overflow-hidden `}
+          className={`min-w-[32rem] min-h-[21rem] flex items-center justify-center overflow-hidden `}
           style={{ background: 'rgb(33, 33, 33)' }}
         >
           <SwitchTransition>
@@ -39,7 +29,7 @@ function App(): JSX.Element {
               classNames="fade"
             >
               <Routes location={location}>
-                <Route index element={<Index />} />
+                <Route path={'/'} element={<Index />} />
                 <Route path={'/auth/login'} element={<Login />} />
               </Routes>
             </CSSTransition>
@@ -47,7 +37,7 @@ function App(): JSX.Element {
         </div>
       </div>
       <span
-        className={`w-full h-full absolute top-0 left-0 -z-10 flex items-end justify-center pointer-events-none`}
+        className={`w-full h-full absolute bottom-0 left-0 -z-10 flex items-end justify-center pointer-events-none`}
       >
         <img
           src={
@@ -59,8 +49,79 @@ function App(): JSX.Element {
         {/*<div className={`w-full h-full bg-white bg-opacity-10 backdrop-blur-sm`}></div>*/}
         {/*</div>*/}
       </span>
+      {/*<span className={`absolute top-11 left-5 w-44 h-10 bg-[#212121] text-white`}>a</span>*/}
     </main>
   )
 }
-
 export default App
+
+const Index = (): JSX.Element => {
+  window.electron.ipcRenderer.send('window:setSize', [900, 600])
+  window.electron.ipcRenderer.send('window:closeResizable')
+  const { createNotification } = useContext(NotificationContextCore)
+  const { setAccountMetaDef, accountMeta } = useContext(MainContext)
+
+  const { t } = useTranslation()
+
+  useEffect(() => {
+    window.electron.ipcRenderer.on('auth:ms-out', (_event, msg) => {
+      let login = true
+      if (typeof msg === 'string') {
+        const args = msg.split(':')
+        if (args[0] == 'error') {
+          const textArgs = args[1].split('|')
+          if (textArgs.length > 1) {
+            if (textArgs[0] == 'i18n') {
+              createNotification(Card.error, t(textArgs[1]))
+            }
+          } else {
+            createNotification(Card.error, `${t('error.prefix')}: ${args[1]}`)
+          }
+        }
+      } else {
+        login = false
+        setAccountMetaDef(msg)
+        push('/app')
+      }
+      if (login) push('/auth/login')
+    })
+
+    return (): void => {
+      window.electron.ipcRenderer.removeAllListeners('auth:ms-out')
+    }
+  }, [])
+
+  const p = useNavigate()
+  const push = (path: string) => setTimeout(() => p(path), 0)
+
+  const [one, setOne] = useState(false)
+  useEffect(() => {
+    if (one) mainDef()
+  }, [one])
+
+  useEffect(() => {
+    setOne(true)
+  }, [])
+  const mainDef = (): void => {
+    const tokenType = localStorage.getItem('tokenType')
+    if (!tokenType) push('/auth/login')
+    else if (tokenType == 'offline') push('/app')
+    else if (tokenType.split(':')[0] == 'online') {
+      const uuid = tokenType.split(':')[1]
+      if (accountMeta == null) {
+        if (uuid != null) {
+          if (localStorage.getItem(`msAccount.id-${uuid}.data`) != null) {
+            const refreshToken = JSON.parse(
+              atob('' + localStorage.getItem(`msAccount.id-${uuid}.data`))
+            ).microsoftRefreshToken
+            window.electron.ipcRenderer.send('auth:ms-in', Decrypt(refreshToken))
+            return
+          }
+        }
+      }
+      push('/app')
+    }
+  }
+
+  return <Loading border={false} />
+}

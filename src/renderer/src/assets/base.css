@@ -1,0 +1,37 @@
+::selection {
+  color: white;
+  background: rgba(42, 36, 73, 0.71);
+}
+
+/*定义滚动条高宽及背景
+高宽分别对应横竖滚动条的尺寸*/
+::-webkit-scrollbar {
+  width: 7px;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0);
+}
+
+/*定义滚动条轨道
+内阴影+圆角*/
+::-webkit-scrollbar-track {
+  /*//border-radius: 10px;*/
+  background-color: #212121;
+}
+
+/*定义滑块
+内阴影+圆角*/
+::-webkit-scrollbar-thumb {
+  transition: 1s;
+  background-color: #535353;
+}
+
+
+@font-face {
+  font-family: 'gh-Mona';
+  src:
+    url("Mona-Sans.ttf");
+  font-weight: 200 900;
+  font-stretch: 75% 125%;
+}
+
+

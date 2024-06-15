@@ -1,4 +1,4 @@
-import MainHeader from '../components/MainHeader'
+import InitHeader from '../components/InitHeader'
 import licenseBackground from '../assets/img/licenseBackground.jpg'
 
 function License(): JSX.Element {
@@ -11,7 +11,7 @@ function License(): JSX.Element {
   return (
     <main className={`w-full h-full relative`}>
       <div className={`w-[calc(100vw-10rem)]`}>
-        <MainHeader
+        <InitHeader
           title={'Apache License 2.0'}
           close={() => window.electron.ipcRenderer.send('window:closeLicense')}
         />

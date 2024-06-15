@@ -28,6 +28,9 @@ const NotificationContext = ({ children }: { children: ReactNode }): JSX.Element
     ])
   }
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const deleteNotification = (id: number): void =>
     setNotifications(notifications.filter((notification) => notification.id !== id))
 
@@ -42,7 +45,9 @@ const NotificationContext = ({ children }: { children: ReactNode }): JSX.Element
         {notifications.map(({ id, card, title, body }) => {
           return (
             <Notification
-              onDelete={() => deleteNotification(id)}
+              onDelete={() => {
+                // deleteNotification(id)
+              }}
               key={id}
               title={title}
               card={card}

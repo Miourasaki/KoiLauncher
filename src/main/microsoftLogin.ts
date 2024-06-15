@@ -2,19 +2,21 @@ import { mainWindow } from './mainWindow'
 import { BrowserWindow, session } from 'electron'
 import icon from '../../resources/icon.png?asset'
 import randomString from './utils/randomString'
+import axios from 'axios'
 
 export let msWindow: BrowserWindow
 
 const microsoftLogin = (event: Electron.IpcMainEvent): void => {
   const msState = `koil.ms.${randomString(16)}`
+  const msSize = [900, 572]
 
   msWindow = new BrowserWindow({
-    width: 900,
-    height: 572,
-    minWidth: 900,
-    minHeight: 572,
-    maxWidth: 900,
-    maxHeight: 572,
+    width: msSize[0],
+    height: msSize[1],
+    minWidth: msSize[0],
+    minHeight: msSize[1],
+    maxWidth: msSize[0],
+    maxHeight: msSize[1],
     show: false,
     parent: mainWindow,
     autoHideMenuBar: true,
@@ -36,7 +38,7 @@ const microsoftLogin = (event: Electron.IpcMainEvent): void => {
   const changMsWindowPosition = (): void => {
     const mainWindowPosition = mainWindow.getPosition()
     msWindow.setPosition(mainWindowPosition[0], mainWindowPosition[1] + 28)
-    msWindow.setSize(900, 572)
+    msWindow.setSize(msSize[0], msSize[1])
   }
   msWindow
     // .loadURL(
@@ -91,7 +93,7 @@ const microsoftLogin = (event: Electron.IpcMainEvent): void => {
         msWindow.close()
         const tokenCode = windowUrl.searchParams.get('code')
         if (tokenCode)
-          getMinecraftProfile(tokenCode, '')
+          mainFunc(tokenCode)
             .then((r) => event.reply('oauth:ms-out', r))
             .catch((r) => event.reply('oauth:ms-out', `error:${r}`))
       } else if (
@@ -106,7 +108,7 @@ const microsoftLogin = (event: Electron.IpcMainEvent): void => {
   }
 }
 const log = (s: string = ''): void => {
-  if (typeof s == 'string') console.log(s)
+  if (typeof s == 'boolean') console.log(s)
 }
 const getMicrosoftToken = (code: string): Promise<Map<string, string>> => {
   log('Minecraft Token get Program Start')
@@ -144,11 +146,59 @@ const getMicrosoftToken = (code: string): Promise<Map<string, string>> => {
         tokenMap.set('refresh_token', msRefreshToken)
         resolve(tokenMap)
       })
-      .catch(() => rejects('Microsoft Token Error'))
+      .catch(() => rejects('i18n|error.msAccount.failure'))
+  })
+}
+const getMicrosoftTokenWithRefreshToken = (code: string): Promise<Map<string, string>> => {
+  log('Minecraft Token get Program Start')
+  return new Promise((resolve, rejects) => {
+    const tokenMap = new Map<string, string>()
+    const dataGetMsToken = new URLSearchParams()
+    dataGetMsToken.append('client_id', '00000000402b5328')
+    dataGetMsToken.append('refresh_token', code)
+    dataGetMsToken.append('grant_type', 'refresh_token')
+    dataGetMsToken.append('redirect_uri', 'https://login.live.com/oauth20_desktop.srf')
+    dataGetMsToken.append('scope', 'service::user.auth.xboxlive.com::MBI_SSL')
+    const headersGetMsToken = new Headers()
+    headersGetMsToken.append('ContentType', 'application/x-www-form-urlencoded')
+    headersGetMsToken.append('content-type', 'application/x-www-form-urlencoded')
+    headersGetMsToken.append('user-agent', `KoiLauncher/${process.env.npm_package_version}`)
+
+    const configGetMsToken: RequestInit = {
+      method: 'POST',
+      headers: headersGetMsToken,
+      body: dataGetMsToken,
+      redirect: 'follow'
+    }
+    log('- get microsoft assess token start from code from refresh_token ' + code)
+    fetch('https://login.live.com/oauth20_token.srf', configGetMsToken)
+      .then((r) => r.json())
+      .then((result) => {
+        const msAccessToken = result.access_token
+        const msRefreshToken = result.refresh_token
+        log('| accessToken - ' + msAccessToken)
+        log('| refreshToken - ' + msRefreshToken)
+        log('- get microsoft assess token done from refresh_token')
+        log()
+
+        tokenMap.set('access_token', msAccessToken)
+        tokenMap.set('refresh_token', msRefreshToken)
+        resolve(tokenMap)
+      })
+      .catch(() => rejects('i18n|error.msAccount.failure'))
   })
 }
 
-const getMinecraftProfile = (code: string = '', refreshToken: string = ''): Promise<any> => {
+export const getMinecraftProfileWithRefreshToken = (
+  event: Electron.IpcMainEvent,
+  args: any
+): void => {
+  mainFunc('', args)
+    .then((r) => event.reply('auth:ms-out', r))
+    .catch((r) => event.reply('auth:ms-out', `error:${r}`))
+}
+
+const mainFunc = (code: string = '', refreshToken: string = ''): Promise<any> => {
   return new Promise((resolve, reject) => {
     if (code != '') {
       getMicrosoftToken(code)
@@ -159,7 +209,7 @@ const getMinecraftProfile = (code: string = '', refreshToken: string = ''): Prom
         )
         .catch((e) => reject(e))
     } else if (refreshToken != '') {
-      getMicrosoftToken(code)
+      getMicrosoftTokenWithRefreshToken(refreshToken)
         .then((r) =>
           mainDef(r)
             .then((r) => resolve(r))
@@ -172,25 +222,53 @@ const getMinecraftProfile = (code: string = '', refreshToken: string = ''): Prom
       return new Promise((resolve, reject) => {
         getMinecraftToken(`${msToken.get('access_token')}`)
           .then((result) => {
-            // axios
-            //   .get('https://api.minecraftservices.com/entitlements/mcstore', {
-            //     headers: {
-            //       Authorization: `Bearer ${result.access_token}`
-            //     }
-            //   })
-            //   .then(() => {
-            resolve({
-              microsoftRefreshToken: msToken.get('refresh_token'),
-              minecraftMeta: {
-                tokenMeta: result
-              }
-            })
-            // })
-            // .catch(() => reject('i18n|error.msAccount.minecraft.notOwned'))
+            getMinecraftProfile(result.access_token)
+              .then((r) =>
+                resolve({
+                  microsoftMeta: {
+                    accessToken: msToken.get('access_token'),
+                    refreshToken: msToken.get('refresh_token')
+                  },
+                  minecraftMeta: {
+                    minecraftTokenMeta: result,
+                    minecraftAccessMeta: r
+                  }
+                })
+              )
+              .catch((e) => reject(e))
           })
           .catch((err) => reject(err))
       })
     }
+  })
+}
+
+const getMinecraftProfile = (mcAccessToken: string): Promise<any> => {
+  return new Promise((resolve, reject) => {
+    axios.defaults.timeout = 10000
+    axios
+      .get('https://api.minecraftservices.com/entitlements/mcstore', {
+        headers: {
+          Authorization: `Bearer ${mcAccessToken}`
+        }
+      })
+      .then((r) => {
+        if (r.data.items.length <= 0) reject('i18n|error.msAccount.minecraft.notOwned')
+        axios
+          .get('https://api.minecraftservices.com/minecraft/profile', {
+            headers: {
+              Authorization: `Bearer ${mcAccessToken}`
+            }
+          })
+          .then((pr) =>
+            resolve({
+              mcstoreMeta: r.data,
+              profileMeta: pr.data
+            })
+          )
+          .catch(() => reject('i18n|error.msAccount.failure'))
+      })
+      .catch(() => reject('i18n|error.msAccount.failure'))
   })
 }
 
@@ -244,6 +322,7 @@ const getMinecraftToken = (msAccessToken: string): Promise<any> => {
           .then((r) => r.json())
           .then((result) => {
             if (result.Token == null) reject('i18n|error.msAccount.xbox.unregistered')
+
             const xstsToken = result.Token
             const xstsUserHash = result.DisplayClaims.xui[0].uhs
             log('| xstsToken - ' + xstsToken)
@@ -263,18 +342,18 @@ const getMinecraftToken = (msAccessToken: string): Promise<any> => {
             })
               .then((r) => r.json())
               .then((result) => {
-                if (result.access_token == null) reject('i18n|error.msAccount.minecraft.notOwned')
+                if (result.access_token == null) reject('i18n|error.msAccount.failure')
                 const accessToken = result.access_token
                 log('| accessToken - ' + accessToken)
                 log('- All Down, Back Token')
                 log()
                 resolve(result)
               })
-              .catch(() => reject('i18n|error.msAccount.minecraft.notOwned'))
+              .catch(() => reject('i18n|error.msAccount.failure'))
           })
-          .catch(() => reject('i18n|error.msAccount.xbox.unregistered'))
+          .catch(() => reject('i18n|error.msAccount.failure'))
       })
-      .catch(() => reject('i18n|error.msAccount.xbox.unregistered'))
+      .catch(() => reject('i18n|error.msAccount.failure'))
   })
 }
 export default microsoftLogin
