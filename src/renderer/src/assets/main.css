@@ -71,7 +71,7 @@ body {
 
 
 .loginFrom {
-  animation: loginFrom .3s forwards ease-in;
+  animation: loginFrom .2s forwards ease-in;
 }
 @keyframes loginFrom {
   from {
@@ -82,7 +82,7 @@ body {
   }
 }
 .loginTo {
-  animation: loginTo .3s forwards ease-out;
+  animation: loginTo .2s forwards ease-out;
 }
 @keyframes loginTo {
   from {

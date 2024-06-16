@@ -1,4 +1,3 @@
-
 const MainHeader = ({
   title = '',
   color = '#1e1e1e'

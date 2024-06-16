@@ -41,7 +41,9 @@ const NotificationContext = ({ children }: { children: ReactNode }): JSX.Element
       }}
     >
       {children}
-      <div className={`fixed top-14 right-0 overflow-y-auto ofhide h-full flex flex-col gap-1.5 z-30`}>
+      <div
+        className={`fixed top-14 right-0 overflow-y-auto ofhide max-h-full flex flex-col z-30`}
+      >
         {notifications.map(({ id, card, title, body }) => {
           return (
             <Notification

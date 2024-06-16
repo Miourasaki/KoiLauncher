@@ -245,30 +245,32 @@ const mainFunc = (code: string = '', refreshToken: string = ''): Promise<any> =>
 
 const getMinecraftProfile = (mcAccessToken: string): Promise<any> => {
   return new Promise((resolve, reject) => {
-    axios.defaults.timeout = 10000
-    axios
-      .get('https://api.minecraftservices.com/entitlements/mcstore', {
-        headers: {
-          Authorization: `Bearer ${mcAccessToken}`
-        }
-      })
-      .then((r) => {
-        if (r.data.items.length <= 0) reject('i18n|error.msAccount.minecraft.notOwned')
-        axios
-          .get('https://api.minecraftservices.com/minecraft/profile', {
-            headers: {
-              Authorization: `Bearer ${mcAccessToken}`
-            }
-          })
-          .then((pr) =>
-            resolve({
-              mcstoreMeta: r.data,
-              profileMeta: pr.data
+    // axios.defaults.timeout = 10000
+    const axiosHeader = {
+      Authorization: `Bearer ${mcAccessToken}`,
+      'User-Agent': `KoiLauncher/${process.env.npm_package_version}`
+    }
+    setTimeout(() => {
+      axios
+        .get('https://api.minecraftservices.com/entitlements/mcstore', {
+          headers: axiosHeader
+        })
+        .then((r) => {
+          if (r.data.items.length <= 0) reject('i18n|error.msAccount.minecraft.notOwned')
+          axios
+            .get('https://api.minecraftservices.com/minecraft/profile', {
+              headers: axiosHeader
             })
-          )
-          .catch(() => reject('i18n|error.msAccount.failure'))
-      })
-      .catch(() => reject('i18n|error.msAccount.failure'))
+            .then((pr) =>
+              resolve({
+                mcstoreMeta: r.data,
+                profileMeta: pr.data
+              })
+            )
+            .catch(() => reject('i18n|error.msAccount.failure2'))
+        })
+        .catch(() => reject('i18n|error.msAccount.failure1'))
+    }, 2000)
   })
 }
 

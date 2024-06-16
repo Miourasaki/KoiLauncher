@@ -3,6 +3,7 @@
 
   "meta.building": "In development...",
   "meta.account.type.microsoft": "Microsoft Account",
+  "meta.account.type.offline": "Offline Account",
 
   "login.title": "Add Account",
   "login.microsoft": "WITH Microsoft",

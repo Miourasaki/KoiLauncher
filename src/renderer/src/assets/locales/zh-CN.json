@@ -3,6 +3,7 @@
 
   "meta.building": "构建开发中...",
   "meta.account.type.microsoft": "Microsoft账户",
+  "meta.account.type.offline": "离线模式",
 
   "login.title": "添加本地账号",
   "login.microsoft": "使用Microsoft登录",

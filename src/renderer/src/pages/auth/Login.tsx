@@ -26,7 +26,7 @@ const Login = (): JSX.Element => {
       setLoginClass(b)
     } else {
       setLoginClass(b)
-      setTimeout(() => setLoginMain(b), 300)
+      setTimeout(() => setLoginMain(b), 200)
     }
   }
 
@@ -112,7 +112,7 @@ const Login = (): JSX.Element => {
         <button
           disabled={login}
           onClick={() => {
-            localStorage.setItem('tokenType', 'offline')
+            localStorage.setItem('account.tokenType', 'offline')
             push('/')
           }}
           className={`btn w-full h-10`}

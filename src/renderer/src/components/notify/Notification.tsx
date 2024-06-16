@@ -56,7 +56,7 @@ const Notification: React.FC<NotificationProps> = ({
       const timerId = setTimeout(() => {
         if (mainRef.current) setMainEleHeight(mainRef.current.offsetHeight)
         timerPx = setInterval(() => {
-          setMainEleHeight((i) => i - 4)
+          setMainEleHeight((i) => i - 10)
         }, 1)
       }, 250)
       return () => {
@@ -68,6 +68,7 @@ const Notification: React.FC<NotificationProps> = ({
   useEffect(() => {
     if (mainEleHeight <= 0) {
       clearInterval(timerPx)
+      setMainEleHeight(0)
       onDelete()
     }
   }, [mainEleHeight])
@@ -83,10 +84,10 @@ const Notification: React.FC<NotificationProps> = ({
   }, [])
 
   return (
-    <div style={{ maxHeight: `${mainEleHeight}px` }} className={`shadow-sm`}>
+    <div style={{ maxHeight: `${mainEleHeight}px` }} className={`${mainEleHeight==0 && 'hidden'}`}>
       <div
         ref={mainRef}
-        className={`notification flex bg-[#474747] ${isClosing ? 'slideOut' : 'slideIn'}`}
+        className={`notification flex bg-[#474747] mb-1.5 shadow-sm ${isClosing ? 'slideOut' : 'slideIn'}`}
       >
         <div className={`flex w-full`}>
           <div className={`bar ${card} min-w-[0.22rem] h-full`}></div>

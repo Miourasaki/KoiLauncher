@@ -59,7 +59,7 @@ const Index = (): JSX.Element => {
   window.electron.ipcRenderer.send('window:setSize', [900, 600])
   window.electron.ipcRenderer.send('window:closeResizable')
   const { createNotification } = useContext(NotificationContextCore)
-  const { setAccountMetaDef, accountMeta } = useContext(MainContext)
+  const { setAccountMetaDef, setAccountMeta, accountMeta } = useContext(MainContext)
 
   const { t } = useTranslation()
 
@@ -91,8 +91,7 @@ const Index = (): JSX.Element => {
     }
   }, [])
 
-  const p = useNavigate()
-  const push = (path: string) => setTimeout(() => p(path), 0)
+  const push = useNavigate()
 
   const [one, setOne] = useState(false)
   useEffect(() => {
@@ -103,10 +102,22 @@ const Index = (): JSX.Element => {
     setOne(true)
   }, [])
   const mainDef = (): void => {
-    const tokenType = localStorage.getItem('tokenType')
+    const tokenType = localStorage.getItem('account.tokenType')
     if (!tokenType) push('/auth/login')
-    else if (tokenType == 'offline') push('/app')
-    else if (tokenType.split(':')[0] == 'online') {
+    else if (tokenType == 'offline') {
+      const offlineId = localStorage.getItem('account.offLine.id')
+      const result = {
+        accountType: 'offline',
+        accountProfile: {
+          id: offlineId,
+          name: offlineId
+        }
+      }
+
+      setAccountMeta(result)
+      sessionStorage.setItem('accountMeta', btoa(JSON.stringify(result)))
+      push('/app')
+    } else if (tokenType.split(':')[0] == 'online') {
       const uuid = tokenType.split(':')[1]
       if (accountMeta == null) {
         if (uuid != null) {

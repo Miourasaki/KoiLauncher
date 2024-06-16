@@ -45,7 +45,7 @@ const MainContextProvider = ({ children }: { children: ReactNode }) => {
         localStorage.setItem(key, base64LocalData)
       }
     }
-    localStorage.setItem(`tokenType`, 'online:' + uuid)
+    localStorage.setItem(`account.tokenType`, 'online:' + uuid)
   }
 
   return (

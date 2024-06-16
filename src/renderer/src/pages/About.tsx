@@ -96,14 +96,17 @@ function About(): JSX.Element {
   }
 
   return (
-    <main className={`w-full h-full relative drag font-[gh-Mona]`} style={{ background: '#212121' }}>
+    <main
+      className={`w-full h-full relative drag font-[gh-Mona]`}
+      style={{ background: '#212121' }}
+    >
       <div
         ref={mainRef}
         className={`w-full h-full flex-grow flex px-8 py-6 text-white flex-col transition-all duration-100`}
       >
         <div className={`w-full flex justify-between items-center`}>
           <a
-            href={'https://koil.mio.am'}
+            href={'https://koil.miourasaki.net'}
             target={'_blank'}
             className={`flex items-center gap-3.5`}
             rel="noreferrer"

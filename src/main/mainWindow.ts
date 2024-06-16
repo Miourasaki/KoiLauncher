@@ -6,6 +6,8 @@ import icon from '../../resources/icon.png?asset'
 export let mainWindow: BrowserWindow
 
 export function createWindow(): void {
+  let useDevTools: boolean = false
+  if (is.dev && process.env['ELECTRON_RENDERER_URL']) useDevTools = true
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 900,
@@ -21,9 +23,17 @@ export function createWindow(): void {
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       nodeIntegration: true,
-      sandbox: false
+      sandbox: false,
+      devTools: useDevTools
     }
   })
+
+  // mainWindow.webContents.session
+  //   .setProxy({
+  //     proxyRules: 'http=localhost:1080',
+  //     proxyBypassRules: 'localhost'
+  //   })
+  //   .then(() => {})
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()

@@ -39,10 +39,12 @@ const InitHeader = ({
         <button
           onClick={() => setLangMenu(!langMenu)}
           id={'changeLangMenu'}
-          className={`h-full pl-3 pr-2 transition-all items-center flex justify-between hover:bg-white hover:text-black mt-[0.12rem] ${langMenu && 'bg-white text-black'}`}
+          className={`h-full pl-3 pr-2 transition-all items-center flex justify-between hover:bg-white hover:text-black mt-[0.062rem] ${langMenu && 'bg-white text-black'}`}
         >
           <div className={`pointer-events-none text-[0.7rem] overflow-hidden t`}>{t('lang')}</div>
-          <div className={`pointer-events-none ml-2 transition-all ${langMenu && 'rotate3d-account'}`}>
+          <div
+            className={`pointer-events-none ml-2 transition-all ${langMenu && 'rotate3d-account'}`}
+          >
             <svg className={`w-4`} viewBox="0 0 24 24">
               <path
                 d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6l-6-6l1.41-1.41z"
@@ -54,19 +56,21 @@ const InitHeader = ({
         <div
           className={`fixed py-1 gap-0.5 max-h-96 bg-white text-black top-7 left-10 overflow-y-auto z-20 ofhide ${!langMenu && 'hidden'}`}
         >
-          <div>{}</div>
           {Object.keys(i18nData).map((key) => (
             <div
               key={key}
               onClick={() => {
-                i18n.changeLanguage(key).then(() => {
-                  createNotification(
-                    Card.success,
-                    `${t('info.changeLang')} ${i18nData[key]['translation']['lang']}`
-                  )
-                })
+                if (i18n.language != key)
+                  i18n.changeLanguage(key).then(() => {
+                    createNotification(
+                      Card.success,
+                      `${t('info.changeLang')} ${i18nData[key]['translation']['lang']}`
+                    )
+                    localStorage.setItem('launcher.option.language', key)
+                    if (navigator.language == key) localStorage.removeItem('launcher.option.language')
+                  })
               }}
-              className={`px-3 py-2 text-xs hover:bg-[#c88f9b] hover:text-white`}
+              className={`px-3 py-2 text-xs hover:bg-[#c88f9b] hover:text-white ${i18n.language == key && 'font-bold'}`}
             >
               {i18nData[key]['translation']['lang']}
             </div>
@@ -83,7 +87,7 @@ const InitHeader = ({
   const BarCenterItems = () => {
     return (
       <div
-        className={`flex w-auto px-3 h-full items-center justify-center mt-[0.11rem] font-[gh-Mona]`}
+        className={`flex w-auto px-3 h-full items-center justify-center text-[0.78rem] mt-[0.08rem] font-[gh-Mona]`}
       >
         {title}
       </div>

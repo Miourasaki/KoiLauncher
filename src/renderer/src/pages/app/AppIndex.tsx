@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import MainHeader from '../../components/mainHeader'
-import AppBar from "./comp/AppBar";
+import AppBar from './comp/AppBar'
 
 const AppIndexPage = () => {
   const backWidth = window.localStorage.getItem('backWidth')
@@ -28,7 +28,7 @@ const AppIndexPage = () => {
   return (
     <>
       <MainHeader />
-      <div className={`w-full h-full flex bg-[#e7c0c9]`}>
+      <div className={`w-full h-full flex bg-[#e7c0c9] relative`}>
         <AppBar />
       </div>
       {/*<div className={`h-7`}>Header</div>*/}
