@@ -9,6 +9,7 @@
   "login.microsoft": "使用Microsoft登录",
   "login.uim": "使用UIM系统登录",
   "login.local": "从本地文件导入",
+  "login.back": "原路返回启动器",
   "login.other": "使用\t离线账号\t或\t稍后设置",
 
   "error.msAccount.failure": "连接至验证服务器时错误.",

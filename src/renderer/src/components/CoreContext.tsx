@@ -10,6 +10,7 @@ const MainContextProvider = ({ children }: { children: ReactNode }) => {
     const result: any = {
       accountType: 'microsoft',
       accountProfile: msg.minecraftMeta.minecraftAccessMeta.profileMeta,
+      accessToken: msg.minecraftMeta.minecraftTokenMeta.access_token,
       microsoftAccess: {
         mcstoreMeta: msg.minecraftMeta.minecraftAccessMeta.mcstoreMeta
       }
@@ -46,6 +47,9 @@ const MainContextProvider = ({ children }: { children: ReactNode }) => {
       }
     }
     localStorage.setItem(`account.tokenType`, 'online:' + uuid)
+    const msAccountList = localStorage.getItem('msAccount.list')
+    if (msAccountList == null) localStorage.setItem('msAccount.list', JSON.stringify([uuid]))
+    else localStorage.setItem('msAccount.list', JSON.stringify(JSON.parse(msAccountList).append(uuid)))
   }
 
   return (

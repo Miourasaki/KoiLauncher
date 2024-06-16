@@ -62,6 +62,9 @@ const Login = (): JSX.Element => {
   }, [])
 
   const other = t('login.other').split('\t')
+
+  const isLogin = sessionStorage.getItem('accountMeta') != null
+
   return (
     <>
       <div
@@ -87,27 +90,50 @@ const Login = (): JSX.Element => {
             </svg>
             <div>{t('login.microsoft')}</div>
           </button>
-          <button
-            disabled={true}
-            className={`btn-g relative w-full h-10 btn-outline-sakura sakura tracking-wide flex px-20 items-center justify-between`}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="17"
-              height="17"
-              className={`mr-[2px]`}
-              fill="currentColor"
-              viewBox="0 0 16 16"
+          {isLogin ? (
+            <button
+              disabled={login}
+              onClick={() => push('/app')}
+              className={`btn relative w-full h-10 btn-outline-sakura sakura tracking-wide flex px-20 items-center justify-between`}
             >
-              <path d="M15.528 2.973a.75.75 0 0 1 .472.696v8.662a.75.75 0 0 1-.472.696l-7.25 2.9a.75.75 0 0 1-.557 0l-7.25-2.9A.75.75 0 0 1 0 12.331V3.669a.75.75 0 0 1 .471-.696L7.443.184l.004-.001.274-.11a.75.75 0 0 1 .558 0l.274.11.004.001zm-1.374.527L8 5.962 1.846 3.5 1 3.839v.4l6.5 2.6v7.922l.5.2.5-.2V6.84l6.5-2.6v-.4l-.846-.339Z" />
-            </svg>
-            <div>{t('login.local')}</div>
-            <span
-              className={`absolute w-full h-full top-0 left-0 bg-stone-700 bg-opacity-60 flex justify-center items-center text-stone-400 backdrop-blur-[2px]`}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                fill="currentColor"
+                className="bi bi-arrow-left-circle mr-[0.1rem]"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"
+                />
+              </svg>
+              <div>{t('login.back')}</div>
+            </button>
+          ) : (
+            <button
+              disabled={true}
+              className={`btn-g relative w-full h-10 btn-outline-sakura sakura tracking-wide flex px-20 items-center justify-between`}
             >
-              {t('meta.building')}
-            </span>
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="17"
+                height="17"
+                className={`mr-[2px]`}
+                fill="currentColor"
+                viewBox="0 0 16 16"
+              >
+                <path d="M15.528 2.973a.75.75 0 0 1 .472.696v8.662a.75.75 0 0 1-.472.696l-7.25 2.9a.75.75 0 0 1-.557 0l-7.25-2.9A.75.75 0 0 1 0 12.331V3.669a.75.75 0 0 1 .471-.696L7.443.184l.004-.001.274-.11a.75.75 0 0 1 .558 0l.274.11.004.001zm-1.374.527L8 5.962 1.846 3.5 1 3.839v.4l6.5 2.6v7.922l.5.2.5-.2V6.84l6.5-2.6v-.4l-.846-.339Z" />
+              </svg>
+              <div>{t('login.local')}</div>
+              <span
+                className={`absolute w-full h-full top-0 left-0 bg-stone-700 bg-opacity-60 flex justify-center items-center text-stone-400 backdrop-blur-[2px]`}
+              >
+                {t('meta.building')}
+              </span>
+            </button>
+          )}
         </div>
         <button
           disabled={login}

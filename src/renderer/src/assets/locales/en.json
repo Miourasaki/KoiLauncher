@@ -9,6 +9,7 @@
   "login.microsoft": "WITH Microsoft",
   "login.uim": "WITH MioSeiYa",
   "login.local": "WITH Local File",
+  "login.back": "Back to Launcher",
   "login.other": "Use\tAnother\tor\tSetup Later",
 
   "error.msAccount.failure": "Error connecting to authentication server.",

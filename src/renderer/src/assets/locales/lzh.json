@@ -7,6 +7,7 @@
   "login.microsoft": "用微軟戶识审也",
   "login.uim": "以誓约书入录",
   "login.local": "从檄入信息。\n",
+  "login.back": "回",
   "login.other": "使用\t離綫賬號\t或\t稍後設置",
 
   "error.msAccount.failure": "無法鏈接至驗證服務器.",

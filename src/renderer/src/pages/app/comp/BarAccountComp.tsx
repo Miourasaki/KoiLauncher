@@ -2,24 +2,21 @@ import { useContext, useEffect, useState } from 'react'
 import { NotificationContextCore } from '../../../components/notify/NotificationContext'
 import defaultAvatar from '../../../assets/img/logo-koishi-100-export.png'
 import { useTranslation } from 'react-i18next'
-import { useNavigate } from 'react-router-dom'
-// @ts-ignore
+import { Link } from 'react-router-dom'
 import MainCard from '../../../components/MainCard'
 import gsap from 'gsap'
 import { Card } from '../../../components/notify/Notification'
-import { AppBarContext } from './AppBar'
+import { AppContext } from '../AppIndex'
 
 const BarAccountComp = (): JSX.Element => {
   const { createNotification } = useContext(NotificationContextCore)
   const { t } = useTranslation()
-  const push = useNavigate()
 
   const [bottomHover, setBottomHover] = useState<boolean>(true)
 
   useEffect(() => {}, [])
 
-  const { accountMenu, setAccountMenu, accountName, setAccountName, accountType } =
-    useContext(AppBarContext)
+  const { accountName, setAccountName, accountType } = useContext(AppContext)
 
   const ChangeOfflineName = ({ classBool }: { classBool: boolean }): JSX.Element => {
     const [inputClass, setInputClass] = useState(false)
@@ -126,7 +123,7 @@ const BarAccountComp = (): JSX.Element => {
           disabled={buttonDisabled()}
           onMouseEnter={() => setBottomHover(false)}
           onMouseLeave={() => setBottomHover(true)}
-          className={`text-stone-300 bg-stone-700 px-2 border-dashed border-black border hover:bg-stone-800 hover:shadow-inner transition-all`}
+          className={`pointer-events-auto text-stone-300 bg-stone-700 px-2 border-dashed border-black border hover:bg-stone-800 hover:shadow-inner transition-all`}
         >
           设置离线id
         </button>
@@ -142,7 +139,7 @@ const BarAccountComp = (): JSX.Element => {
         disabled={buttonDisabled()}
         onMouseEnter={() => setBottomHover(false)}
         onMouseLeave={() => setBottomHover(true)}
-        className={`hover:bg-stone-700 hover:px-1.5 rounded-sm transition-all flex items-center`}
+        className={`pointer-events-auto hover:bg-[#131313] hover:px-1.5 rounded-sm transition-all flex items-center`}
       >
         {accountName}
         <svg width="10" height="10" fill="currentColor" className="ml-2" viewBox="0 0 16 16">
@@ -152,6 +149,7 @@ const BarAccountComp = (): JSX.Element => {
     )
   }
 
+  const [accountMenu, setAccountMenu] = useState(true)
   useEffect(() => {
     const clickEvent = (_) => {
       if (_.target.id != 'account-menu') setAccountMenu(false)
@@ -160,6 +158,7 @@ const BarAccountComp = (): JSX.Element => {
 
     return () => document.removeEventListener('click', clickEvent)
   }, [])
+
   const buttonDisabled = (): boolean => {
     return changeOfflineId
   }
@@ -169,21 +168,21 @@ const BarAccountComp = (): JSX.Element => {
         id={`account-menu`}
         onClick={() => setAccountMenu(!accountMenu)}
         disabled={buttonDisabled()}
-        className={`group mt-2 w-full h-[3.3rem] transition-all flex justify-between items-center px-3.5 relative ${bottomHover && 'hover:bg-white hover:bg-opacity-20'}`}
+        className={`group mt-2 w-full h-[3.3rem] transition-all flex justify-between items-center px-3.5 relative ${bottomHover && 'hover:bg-white hover:bg-opacity-15'} ${accountMenu && 'bg-white bg-opacity-15'}`}
       >
-        <div className={`flex items-center`}>
-          <img src={defaultAvatar} alt="" className={`w-8 rounded-full pointer-events-none`} />
+        <div className={`flex items-center pointer-events-none`}>
+          <img src={defaultAvatar} alt="" className={`w-8 rounded-full`} />
           <div className={`ml-2 leading-5 flex flex-col items-start`}>
             <div className={`text-[0.9rem]`}>
               {accountName == '' ? (
-                <div className={'screen-root-item w-24 h-4 mb-1 pointer-events-none'}></div>
+                <div className={'screen-root-item w-24 h-4 mb-1'}></div>
               ) : accountType == 'offline' ? (
                 <OfflineName />
               ) : (
-                <div className={`pointer-events-none`}>{accountName}</div>
+                accountName
               )}
             </div>
-            <div className={`text-xs text-stone-400 pointer-events-none`}>
+            <div className={`text-xs text-stone-400`}>
               {accountType == '' ? (
                 <div className={'screen-root-item w-16 h-3'}></div>
               ) : (
@@ -205,8 +204,54 @@ const BarAccountComp = (): JSX.Element => {
 
         {accountMenu && (
           <div
-            className={`absolute w-9/12 h-10 accountMenu bg-stone-950 -bottom-2 translate-y-full shadow-stone-950 rounded-sm left-1/2 -translate-x-1/2`}
-          ></div>
+            className={`text-[0.8rem] py-2 absolute w-9/12 accountMenu bg-[#131313] -bottom-2 translate-y-full shadow-stone-950 rounded-sm left-1/2 -translate-x-1/2 flex flex-col items-start justify-start`}
+          >
+            <Link
+              to={'/help'}
+              className={`px-3 py-1 hover:bg-[#c88f9b] w-full flex items-center`}
+            >
+              <div className={`mt-[0.12rem] ml-2`}>获取启动器帮助</div>
+            </Link>
+            <div className={`mb-0.5 mt-2 text-[0.6rem] px-3 text-stone-400 w-full flex`}>
+              切换账户 -
+            </div>
+            <Link
+              to={'/auth/login'}
+              className={`px-3 py-1 hover:bg-[#c88f9b] w-full flex items-center`}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className=""
+                viewBox="0 0 16 16"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
+                />
+              </svg>
+              <div className={`mt-[0.12rem] ml-2`}>查看所有账号</div>
+            </Link>
+            <Link
+              to={'/auth/login'}
+              className={`px-3 py-1 hover:bg-[#c88f9b] w-full flex items-center`}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="scale-[0.83]"
+                viewBox="0 0 16 16"
+              >
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+              </svg>
+              <div className={`mt-[0.12rem] ml-2`}>新增账号</div>
+            </Link>
+          </div>
         )}
       </button>
       {changeOfflineId && <ChangeOfflineName classBool={changeOfflineIdClass} />}

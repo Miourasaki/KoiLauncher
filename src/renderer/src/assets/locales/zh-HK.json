@@ -7,6 +7,7 @@
   "login.microsoft": "使用Microsoft登錄",
   "login.uim": "使用UIM系統登陸",
   "login.local": "從本地文件導入",
+  "login.back": "原路返回啓動器",
   "login.other": "使用\t離綫賬號\t或\t稍後設置",
 
   "error.msAccount.failure": "無法鏈接至驗證服務器.",
