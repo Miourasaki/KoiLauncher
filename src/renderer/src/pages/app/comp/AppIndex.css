@@ -1,0 +1,14 @@
+.accountMenu {
+  animation: accountMenu .1s ease-out forwards;
+}
+
+@keyframes accountMenu {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 50%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 100%);
+  }
+}

@@ -12,6 +12,9 @@ import { useTranslation } from 'react-i18next'
 import { Decrypt } from '../components/AES'
 
 function App(): JSX.Element {
+  window.electron.ipcRenderer.send('window:setSize', [900, 600])
+  window.electron.ipcRenderer.send('window:closeResizable')
+
   const location = useLocation()
 
   return (
@@ -56,8 +59,6 @@ function App(): JSX.Element {
 export default App
 
 const Index = (): JSX.Element => {
-  window.electron.ipcRenderer.send('window:setSize', [900, 600])
-  window.electron.ipcRenderer.send('window:closeResizable')
   const { createNotification } = useContext(NotificationContextCore)
   const { setAccountMetaDef, setAccountMeta, accountMeta } = useContext(MainContext)
 

@@ -2,6 +2,7 @@ import { useLocation } from 'react-router-dom'
 import { useEffect } from 'react'
 import MainHeader from '../../components/mainHeader'
 import AppBar from './comp/AppBar'
+import './comp/AppIndex.css'
 
 const AppIndexPage = () => {
   const backWidth = window.localStorage.getItem('backWidth')
