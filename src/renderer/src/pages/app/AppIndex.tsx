@@ -44,6 +44,10 @@ const AppIndexPage = () => {
     } else push('/')
   }, [])
 
+  useEffect(() => {
+
+
+  }, []);
   // const msAccountMeta: any = JSON.parse(atob('' + sessionStorage.getItem('accountMeta')))
 
   return (

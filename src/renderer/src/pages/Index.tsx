@@ -103,10 +103,12 @@ const Index = (): JSX.Element => {
     setOne(true)
   }, [])
   const mainDef = (): void => {
-    const tokenType = localStorage.getItem('account.tokenType')
+    // @ts-ignore
+    const tokenType = mainStorage.getItem('account.masterType')
     if (!tokenType) push('/auth/login')
     else if (tokenType == 'offline') {
-      const offlineId = localStorage.getItem('account.offLine.id')
+      // @ts-ignore
+      const offlineId = mainStorage.getItem('account.offlineAccount.id')
       const result = {
         accountType: 'offline',
         accountProfile: {
@@ -122,9 +124,11 @@ const Index = (): JSX.Element => {
       const uuid = tokenType.split(':')[1]
       if (accountMeta == null) {
         if (uuid != null) {
-          if (localStorage.getItem(`msAccount.id-${uuid}.data`) != null) {
+          // @ts-ignore
+          if (mainStorage.getItem(`account.microsoftAccount.${uuid}`) != null) {
             const refreshToken = JSON.parse(
-              atob('' + localStorage.getItem(`msAccount.id-${uuid}.data`))
+              // @ts-ignore
+              atob('' + mainStorage.getItem(`account.microsoftAccount.${uuid}`))
             ).microsoftRefreshToken
             window.electron.ipcRenderer.send('auth:ms-in', Decrypt(refreshToken))
             return

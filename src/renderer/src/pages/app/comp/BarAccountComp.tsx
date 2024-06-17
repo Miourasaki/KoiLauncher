@@ -73,7 +73,8 @@ const BarAccountComp = (): JSX.Element => {
             result.accountProfile.name = newId
 
             setAccountName(newId)
-            localStorage.setItem('account.offLine.id', newId)
+            // @ts-ignore
+            mainStorage.setItem('account.offlineAccount.id', newId)
             sessionStorage.setItem('accountMeta', btoa(JSON.stringify(result)))
 
             changeChangeOfflineId(false)
@@ -149,7 +150,7 @@ const BarAccountComp = (): JSX.Element => {
     )
   }
 
-  const [accountMenu, setAccountMenu] = useState(true)
+  const [accountMenu, setAccountMenu] = useState(false)
   useEffect(() => {
     const clickEvent = (_) => {
       if (_.target.id != 'account-menu') setAccountMenu(false)
@@ -206,18 +207,15 @@ const BarAccountComp = (): JSX.Element => {
           <div
             className={`text-[0.8rem] py-2 absolute w-9/12 accountMenu bg-[#131313] -bottom-2 translate-y-full shadow-stone-950 rounded-sm left-1/2 -translate-x-1/2 flex flex-col items-start justify-start`}
           >
-            <Link
-              to={'/help'}
-              className={`px-3 py-1 hover:bg-[#c88f9b] w-full flex items-center`}
-            >
-              <div className={`mt-[0.12rem] ml-2`}>获取启动器帮助</div>
+            <Link to={'/help'} className={`px-3 py-1.5 hover:bg-[#c88f9b] w-full flex items-center`}>
+              <div className={`ml-2`}>获取启动器帮助</div>
             </Link>
             <div className={`mb-0.5 mt-2 text-[0.6rem] px-3 text-stone-400 w-full flex`}>
               切换账户 -
             </div>
             <Link
               to={'/auth/login'}
-              className={`px-3 py-1 hover:bg-[#c88f9b] w-full flex items-center`}
+              className={`px-3 py-1.5 hover:bg-[#c88f9b] w-full flex items-center`}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -232,11 +230,11 @@ const BarAccountComp = (): JSX.Element => {
                   d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
                 />
               </svg>
-              <div className={`mt-[0.12rem] ml-2`}>查看所有账号</div>
+              <div className={`ml-2`}>查看所有账号</div>
             </Link>
             <Link
               to={'/auth/login'}
-              className={`px-3 py-1 hover:bg-[#c88f9b] w-full flex items-center`}
+              className={`px-3 py-1.5 hover:bg-[#c88f9b] w-full flex items-center`}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -249,7 +247,7 @@ const BarAccountComp = (): JSX.Element => {
                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
               </svg>
-              <div className={`mt-[0.12rem] ml-2`}>新增账号</div>
+              <div className={`ml-2`}>新增账号</div>
             </Link>
           </div>
         )}

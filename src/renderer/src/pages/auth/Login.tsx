@@ -93,7 +93,7 @@ const Login = (): JSX.Element => {
           {isLogin ? (
             <button
               disabled={login}
-              onClick={() => push('/app')}
+              onClick={() => push('/')}
               className={`btn relative w-full h-10 btn-outline-sakura sakura tracking-wide flex px-20 items-center justify-between`}
             >
               <svg
@@ -138,7 +138,8 @@ const Login = (): JSX.Element => {
         <button
           disabled={login}
           onClick={() => {
-            localStorage.setItem('account.tokenType', 'offline')
+            // @ts-ignore
+            mainStorage.setItem('account.masterType', 'offline')
             push('/')
           }}
           className={`btn w-full h-10`}

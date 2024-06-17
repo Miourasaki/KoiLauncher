@@ -3,14 +3,53 @@ import { electronApp, optimizer } from '@electron-toolkit/utils'
 import { createWindow, mainWindow } from './mainWindow'
 import { aboutWindow, createAboutWindow, createLicenseWindow, licenseWindow } from './aboutWindow'
 import microsoftLogin, { getMinecraftProfileWithRefreshToken } from './microsoftLogin'
-// import Store from 'electron-store'
+import ElectronStore from 'electron-store'
+
+const appData = app.getPath('appData')
+const realUserData = `${appData}/Koi Launcher`
+app.setPath('userData', `${app.getPath('temp')}/Koi Launcher`)
+
+// const exePath = app.getAppPath().slice(0, app.getAppPath().length - 8)
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
+
+const loadStore = async (): Promise<ElectronStore<Record<string, any>>> => {
+  const { default: Store } = await import('electron-store')
+  const store = new Store({
+    name: 'KoiLConfig',
+    cwd: realUserData
+  })
+
+  return new Promise((resolve) => {
+    resolve(store)
+  })
+}
+
+loadStore().then((store) => {
+  // 定义ipcRenderer监听事件
+  ipcMain.on('store:setItem', (_, key, value) => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    store.set(key, value)
+  })
+
+  ipcMain.on('store:getItem', (_, key) => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const value = store.get(key)
+    _.returnValue = value || null
+  })
+
+  ipcMain.on('store:removeItem', (_, key) => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    store.delete(key)
+  })
+})
+
 app.whenReady().then(() => {
-  const appData = app.getPath('appData')
-  app.setPath('userData', `${appData}/Koi Launcher`)
   // Set app user model id for windows
   electronApp.setAppUserModelId('net.miourasaki.koil')
 
@@ -25,17 +64,6 @@ app.whenReady().then(() => {
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
   })
-
-  // const store = new Store()
-  //
-  // ipcMain.on('mainStore:set', (_, key, value) => {
-  //   store.set(key, value)
-  // })
-  //
-  // ipcMain.on('mainStore:value', (_, key) => {
-  //   const value = store.get(key)
-  //   _.returnValue = value || ''
-  // })
 
   // IPC test
   ipcMain.on('oauth:ms-in', microsoftLogin)

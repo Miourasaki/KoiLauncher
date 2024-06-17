@@ -2,8 +2,10 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import { resources } from '../assets/locales/resources'
 
-let localStorageLanguage = localStorage.getItem('launcher.option.language')
-if (localStorageLanguage == null) localStorageLanguage = navigator.language
+// @ts-ignore
+let localStorageLanguage = mainStorage.getItem('launcher.option.language')
+if (localStorageLanguage == 'system' || localStorageLanguage == null)
+  localStorageLanguage = navigator.language
 
 i18n
   // 将 i18n 实例传递给 react-i18next

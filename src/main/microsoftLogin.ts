@@ -108,7 +108,7 @@ const microsoftLogin = (event: Electron.IpcMainEvent): void => {
   }
 }
 const log = (s: string = ''): void => {
-  if (typeof s == 'boolean') console.log(s)
+  if (typeof s == 'string') console.log(s)
 }
 const getMicrosoftToken = (code: string): Promise<Map<string, string>> => {
   log('Minecraft Token get Program Start')

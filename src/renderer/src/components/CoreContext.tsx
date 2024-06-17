@@ -36,20 +36,26 @@ const MainContextProvider = ({ children }: { children: ReactNode }) => {
       }
     }
     const base64LocalData = btoa(JSON.stringify(localData))
-    const key = `msAccount.id-${uuid}.data`
+    const key = `account.microsoftAccount.${uuid}`
 
-    if (localStorage.getItem(key) == null) {
-      localStorage.setItem(key, base64LocalData)
+    // @ts-ignore
+    if (mainStorage.getItem(key) == null) {
+      // @ts-ignore
+      mainStorage.setItem(key, base64LocalData)
     } else {
-      const msAccountData: any = JSON.parse(atob('' + localStorage.getItem(key)))
+      // @ts-ignore
+      const msAccountData: any = JSON.parse(atob('' + mainStorage.getItem(key)))
       if (msAccountData.minecraftMeta.id === localData.minecraftMeta.id) {
-        localStorage.setItem(key, base64LocalData)
+        // @ts-ignore
+        mainStorage.setItem(key, base64LocalData)
       }
     }
-    localStorage.setItem(`account.tokenType`, 'online:' + uuid)
-    const msAccountList = localStorage.getItem('msAccount.list')
-    if (msAccountList == null) localStorage.setItem('msAccount.list', JSON.stringify([uuid]))
-    else localStorage.setItem('msAccount.list', JSON.stringify(JSON.parse(msAccountList).append(uuid)))
+    // @ts-ignore
+    mainStorage.setItem(`account.masterType`, 'online:' + uuid)
+    // const msAccountList = localStorage.getItem('msAccount.list')
+    // if (msAccountList == null) localStorage.setItem('msAccount.list', JSON.stringify([uuid]))
+    // else
+    //   localStorage.setItem('msAccount.list', JSON.stringify(JSON.parse(msAccountList).append(uuid)))
   }
 
   return (

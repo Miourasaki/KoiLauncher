@@ -66,8 +66,13 @@ const InitHeader = ({
                       Card.success,
                       `${t('info.changeLang')} ${i18nData[key]['translation']['lang']}`
                     )
-                    localStorage.setItem('launcher.option.language', key)
-                    if (navigator.language == key) localStorage.removeItem('launcher.option.language')
+
+                    // @ts-ignore
+                    mainStorage.setItem('launcher.option.language', key)
+                    if (navigator.language == key) {
+                      // @ts-ignore
+                      mainStorage.setItem('launcher.option.language', 'system')
+                    }
                   })
               }}
               className={`px-3 py-2 text-xs hover:bg-[#c88f9b] hover:text-white ${i18n.language == key && 'font-bold'}`}

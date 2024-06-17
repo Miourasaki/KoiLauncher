@@ -30,6 +30,8 @@ mac:
   notarize: false
 dmg:
   artifactName: ${name}-${version}.${ext}
+portable:
+  artifactName: ${name}-portable-${version}.${ext}
 linux:
   target:
     - AppImage
