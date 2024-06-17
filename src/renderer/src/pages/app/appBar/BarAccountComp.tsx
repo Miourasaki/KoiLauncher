@@ -169,7 +169,7 @@ const BarAccountComp = (): JSX.Element => {
         id={`account-menu`}
         onClick={() => setAccountMenu(!accountMenu)}
         disabled={buttonDisabled()}
-        className={`group mt-2 w-full h-[3.3rem] transition-all flex justify-between items-center px-3.5 relative ${bottomHover && 'hover:bg-white hover:bg-opacity-15'} ${accountMenu && 'bg-white bg-opacity-15'}`}
+        className={`group mt-2 w-full min-h-[3.3rem] transition-all flex justify-between items-center px-3.5 relative ${bottomHover && 'hover:bg-white hover:bg-opacity-15'} ${accountMenu && 'bg-white bg-opacity-15'}`}
       >
         <div className={`flex items-center pointer-events-none`}>
           <img src={defaultAvatar} alt="" className={`w-8 rounded-full`} />
@@ -205,9 +205,12 @@ const BarAccountComp = (): JSX.Element => {
 
         {accountMenu && (
           <div
-            className={`text-[0.8rem] py-2 absolute w-9/12 accountMenu bg-[#131313] -bottom-2 translate-y-full shadow-stone-950 rounded-sm left-1/2 -translate-x-1/2 flex flex-col items-start justify-start`}
+            className={`text-[0.8rem] py-2 absolute w-9/12 accountMenu bg-[#131313] -bottom-2 translate-y-full shadow-stone-950 rounded-sm left-1/2 -translate-x-1/2 flex flex-col items-start justify-start ease-in z-10`}
           >
-            <Link to={'/help'} className={`px-3 py-1.5 hover:bg-[#c88f9b] w-full flex items-center`}>
+            <Link
+              to={'/help'}
+              className={`px-3 py-1.5 hover:bg-[#c88f9b] w-full flex items-center`}
+            >
               <div className={`ml-2`}>获取启动器帮助</div>
             </Link>
             <div className={`mb-0.5 mt-2 text-[0.6rem] px-3 text-stone-400 w-full flex`}>

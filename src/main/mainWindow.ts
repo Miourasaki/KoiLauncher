@@ -1,4 +1,4 @@
-import { BrowserWindow, shell } from 'electron'
+import { app, BrowserWindow, ipcMain, shell } from 'electron'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -28,15 +28,40 @@ export function createWindow(): void {
     }
   })
 
-  // mainWindow.webContents.session
-  //   .setProxy({
-  //     proxyRules: 'http=localhost:1080',
-  //     proxyBypassRules: 'localhost'
-  //   })
-  //   .then(() => {})
-
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
+  })
+
+  mainWindow.on('maximize', () => {
+    mainWindow.webContents.send('window:maximizeChange', true)
+  })
+  mainWindow.on('unmaximize', () => {
+    mainWindow.webContents.send('window:maximizeChange', false)
+  })
+
+  ipcMain.on('window:close', () => app.quit())
+  ipcMain.on('window:maximize', () => {
+    mainWindow.maximize()
+  })
+  ipcMain.on('window:unmaximize', (_) => {
+    mainWindow.unmaximize()
+  })
+  ipcMain.on('window:isMaximized', (_) => {
+    _.returnValue = mainWindow.isMaximized()
+  })
+  ipcMain.on('window:minimize', () => mainWindow.minimize())
+
+  ipcMain.on('window:openResizable', () => {
+    mainWindow.setResizable(true)
+    mainWindow.setMaximizable(true)
+  })
+  ipcMain.on('window:closeResizable', () => {
+    mainWindow.setResizable(false)
+    mainWindow.setMaximizable(false)
+  })
+  ipcMain.on('window:setSize', (_event, args) => {
+    mainWindow.setSize(args[0], args[1])
+    mainWindow.setMinimumSize(900, 600)
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {

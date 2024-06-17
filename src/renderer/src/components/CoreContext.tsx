@@ -28,26 +28,25 @@ const MainContextProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const localData = {
-      microsoftRefreshToken: Encrypt(msg.microsoftMeta.refreshToken),
+      refreshToken: Encrypt(msg.microsoftMeta.refreshToken),
+      accessToken: Encrypt(msg.minecraftMeta.minecraftTokenMeta.access_token),
       minecraftMeta: {
         id: uuid,
         name: msg.minecraftMeta.minecraftAccessMeta.profileMeta.name,
         skin: mcSkin
       }
     }
-    const base64LocalData = btoa(JSON.stringify(localData))
+    // const base64LocalData = btoa(JSON.stringify(localData))
     const key = `account.microsoftAccount.${uuid}`
 
     // @ts-ignore
-    if (mainStorage.getItem(key) == null) {
+    if (mainStorage.getItem(key) == null) mainStorage.setItem(key, localData)
+    else {
       // @ts-ignore
-      mainStorage.setItem(key, base64LocalData)
-    } else {
-      // @ts-ignore
-      const msAccountData: any = JSON.parse(atob('' + mainStorage.getItem(key)))
+      const msAccountData: any = mainStorage.getItem(key)
       if (msAccountData.minecraftMeta.id === localData.minecraftMeta.id) {
         // @ts-ignore
-        mainStorage.setItem(key, base64LocalData)
+        mainStorage.setItem(key, localData)
       }
     }
     // @ts-ignore

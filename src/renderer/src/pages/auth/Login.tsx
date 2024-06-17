@@ -8,8 +8,6 @@ import { useTranslation } from 'react-i18next'
 import { MainContext } from '../../components/CoreContext'
 
 const Login = (): JSX.Element => {
-  document.title = 'Koi Launcher | Login'
-
   const push = useNavigate()
   const { t } = useTranslation()
   const { setAccountMetaDef } = useContext(MainContext)

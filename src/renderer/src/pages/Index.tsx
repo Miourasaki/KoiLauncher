@@ -60,7 +60,7 @@ export default App
 
 const Index = (): JSX.Element => {
   const { createNotification } = useContext(NotificationContextCore)
-  const { setAccountMetaDef, setAccountMeta, accountMeta } = useContext(MainContext)
+  const { setAccountMetaDef, setAccountMeta } = useContext(MainContext)
 
   const { t } = useTranslation()
 
@@ -122,14 +122,14 @@ const Index = (): JSX.Element => {
       push('/app')
     } else if (tokenType.split(':')[0] == 'online') {
       const uuid = tokenType.split(':')[1]
-      if (accountMeta == null) {
+      if (sessionStorage.getItem('accountMeta') == null) {
         if (uuid != null) {
           // @ts-ignore
           if (mainStorage.getItem(`account.microsoftAccount.${uuid}`) != null) {
-            const refreshToken = JSON.parse(
-              // @ts-ignore
-              atob('' + mainStorage.getItem(`account.microsoftAccount.${uuid}`))
-            ).microsoftRefreshToken
+            // @ts-ignore
+            const refreshToken = mainStorage.getItem(
+              `account.microsoftAccount.${uuid}`
+            ).refreshToken
             window.electron.ipcRenderer.send('auth:ms-in', Decrypt(refreshToken))
             return
           }

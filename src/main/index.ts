@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import { electronApp, optimizer } from '@electron-toolkit/utils'
-import { createWindow, mainWindow } from './mainWindow'
+import { createWindow } from './mainWindow'
 import { aboutWindow, createAboutWindow, createLicenseWindow, licenseWindow } from './aboutWindow'
 import microsoftLogin, { getMinecraftProfileWithRefreshToken } from './microsoftLogin'
 import ElectronStore from 'electron-store'
@@ -8,7 +8,6 @@ import ElectronStore from 'electron-store'
 const appData = app.getPath('appData')
 const realUserData = `${appData}/Koi Launcher`
 app.setPath('userData', `${app.getPath('temp')}/Koi Launcher`)
-
 // const exePath = app.getAppPath().slice(0, app.getAppPath().length - 8)
 
 // This method will be called when Electron has finished
@@ -26,7 +25,6 @@ const loadStore = async (): Promise<ElectronStore<Record<string, any>>> => {
     resolve(store)
   })
 }
-
 loadStore().then((store) => {
   // 定义ipcRenderer监听事件
   ipcMain.on('store:setItem', (_, key, value) => {
@@ -50,6 +48,11 @@ loadStore().then((store) => {
 })
 
 app.whenReady().then(() => {
+  app.setProxy({
+    proxyRules: 'http=localhost:1080',
+    proxyBypassRules: 'localhost'
+  })
+
   // Set app user model id for windows
   electronApp.setAppUserModelId('net.miourasaki.koil')
 
@@ -68,13 +71,6 @@ app.whenReady().then(() => {
   // IPC test
   ipcMain.on('oauth:ms-in', microsoftLogin)
   ipcMain.on('auth:ms-in', getMinecraftProfileWithRefreshToken)
-
-  ipcMain.on('window:close', () => app.quit())
-  ipcMain.on('window:maximize', () => {
-    if (mainWindow.isMinimized()) mainWindow.unmaximize()
-    else mainWindow.maximize()
-  })
-  ipcMain.on('window:minimize', () => mainWindow.minimize())
 
   ipcMain.on('window:openAbout', () => {
     if (!aboutWindow) createAboutWindow()
@@ -98,18 +94,6 @@ app.whenReady().then(() => {
     }
   })
   ipcMain.on('window:closeLicense', () => licenseWindow.close())
-  ipcMain.on('window:openResizable', () => {
-    mainWindow.setResizable(true)
-    mainWindow.setMaximizable(true)
-  })
-  ipcMain.on('window:closeResizable', () => {
-    mainWindow.setResizable(false)
-    mainWindow.setMaximizable(false)
-  })
-  ipcMain.on('window:setSize', (_event, args) => {
-    mainWindow.setSize(args[0], args[1])
-    mainWindow.setMinimumSize(900, 600)
-  })
 
   createWindow()
 

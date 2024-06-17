@@ -1,8 +1,9 @@
-import { useLocation, useNavigate } from 'react-router-dom'
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { createContext, useEffect, useState } from 'react'
 import MainHeader from '../../components/mainHeader'
-import AppBar from './comp/AppBar'
+import AppBar from './appBar/AppBar'
 import './comp/AppIndex.css'
+import AppOptions from "./AppOptions";
 
 export const AppContext = createContext<any>(null)
 
@@ -44,11 +45,13 @@ const AppIndexPage = () => {
     } else push('/')
   }, [])
 
-  useEffect(() => {
+  const Index = () => {
+    return (<>
+      <div>{JSON.stringify(accountMeta)}</div>
+      <div>{location.pathname}</div>
+    </>)
+  }
 
-
-  }, []);
-  // const msAccountMeta: any = JSON.parse(atob('' + sessionStorage.getItem('accountMeta')))
 
   return (
     <AppContext.Provider
@@ -60,13 +63,15 @@ const AppIndexPage = () => {
       }}
     >
       <MainHeader />
-      <div className={`w-full h-full flex bg-[#e7c0c9] relative`}>
+      <div className={`w-full h-full flex bg-[#333333] relative`}>
         <AppBar />
-        {JSON.stringify(accountMeta)}
+        <div className={`w-full h-full`}>
+          <Routes>
+            <Route index element={<Index />} />
+            <Route path={'options'} element={<AppOptions />} />
+          </Routes>
+        </div>
       </div>
-      {/*<div className={`h-7`}>Header</div>*/}
-      {/*<div>{msAccountMeta.accountType}</div>*/}
-      {/*<div>{JSON.stringify(msAccountMeta)}</div>*/}
     </AppContext.Provider>
   )
 }

@@ -15,11 +15,16 @@ win:
   executableName: Koi Launcher
   target:
     - portable
+#    - nsis
+#    - nsis-web
+#    - AppX
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
+appx:
+
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:

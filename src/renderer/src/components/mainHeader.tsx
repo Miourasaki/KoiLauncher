@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+
 const MainHeader = ({
   title = '',
   color = '#1e1e1e'
@@ -11,14 +13,6 @@ const MainHeader = ({
       <div className={`flex flex-grow h-full items-center justify-start`}>
         <TitleBarIcon />
         <div className={`mt-[0.12rem] font-[gh-Mona] ml-1`}>Koi Launcher</div>
-        {/*<button className={`h-full px-3 transition-all hover:bg-white hover:text-black`}>文件</button>*/}
-        {/*<button className={`h-full px-3 transition-all hover:bg-white hover:text-black`}>编辑</button>*/}
-        {/*<button*/}
-        {/*  onClick={() => window.electron.ipcRenderer.send('window:openAbout')}*/}
-        {/*  className={`h-full px-3 transition-all hover:bg-white hover:text-black`}*/}
-        {/*>*/}
-        {/*  关于*/}
-        {/*</button>*/}
       </div>
     )
   }
@@ -33,6 +27,16 @@ const MainHeader = ({
     )
   }
 
+  const [maximize, setMaximize] = useState<boolean>(
+    window.electron.ipcRenderer.sendSync('window:isMaximized')
+  )
+  useEffect(() => {
+    if (maximize) window.electron.ipcRenderer.send(`window:maximize`)
+    else window.electron.ipcRenderer.send(`window:unmaximize`)
+  }, [maximize])
+  window.electron.ipcRenderer.on('window:maximizeChange', (_, msg) => {
+    setMaximize(msg)
+  })
   const BarEndItems = () => {
     return (
       <div className={`flex w-full h-full items-center justify-end`}>
@@ -52,20 +56,23 @@ const MainHeader = ({
           </svg>
         </button>
         <button
-          onClick={() => {
-            window.electron.ipcRenderer.send('window:maximize')
-          }}
+          onClick={() => setMaximize(!maximize)}
           className={`w-10 h-full hover:bg-white hover:text-[#a0a0a0] transition-all flex items-center justify-center`}
         >
+          {/*{ ? 'true' : 'false'}*/}
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
+            width={maximize ? '13' : '12'}
+            height={maximize ? '13' : '12'}
             fill="currentColor"
             className="mt-[0.1rem]"
             viewBox="0 0 16 16"
           >
-            <path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8" />
+            {maximize ? (
+              <path d="M5.5 0a.5.5 0 0 1 .5.5v4A1.5 1.5 0 0 1 4.5 6h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5m5 0a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 10 4.5v-4a.5.5 0 0 1 .5-.5M0 10.5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 6 11.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5m10 1a1.5 1.5 0 0 1 1.5-1.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0z" />
+            ) : (
+              <path d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5M.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5" />
+            )}
           </svg>
         </button>
         <button
@@ -168,7 +175,7 @@ const MainHeader = ({
   return (
     <header
       style={{ background: color }}
-      className={`w-full min-h-7 drag
+      className={`w-full min-h-[calc(1.75rem+1px)] drag border border-stone-900 z-50
     grid grid-cols-3 grid-rows-subgrid text-white text-xs`}
     >
       <BarStartItems />

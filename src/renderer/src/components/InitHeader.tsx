@@ -54,10 +54,10 @@ const InitHeader = ({
           </div>
         </button>
         <div
-          className={`fixed py-1 gap-0.5 max-h-96 bg-white text-black top-7 left-10 overflow-y-auto z-20 ofhide ${!langMenu && 'hidden'}`}
+          className={`fixed py-1 gap-0.5 max-h-96 bg-white text-black top-7 left-10 overflow-y-auto z-20 ofhide flex flex-col items-start ${!langMenu && 'hidden'}`}
         >
           {Object.keys(i18nData).map((key) => (
-            <div
+            <button
               key={key}
               onClick={() => {
                 if (i18n.language != key)
@@ -75,10 +75,10 @@ const InitHeader = ({
                     }
                   })
               }}
-              className={`px-3 py-2 text-xs hover:bg-[#c88f9b] hover:text-white ${i18n.language == key && 'font-bold'}`}
+              className={`px-3 py-2 text-xs hover:bg-[#c88f9b] hover:text-white w-full focus-visible:outline-[#d98b9b] flex justify-start ${i18n.language == key && 'font-bold'}`}
             >
               {i18nData[key]['translation']['lang']}
-            </div>
+            </button>
           ))}
           {/*<div className={`px-3 py-2 text-xs hover:bg-[#c88f9b] hover:text-white`}>简体中文 - 中国大陆</div>*/}
         </div>
