@@ -8,7 +8,7 @@ const BarVersionComp = (): JSX.Element => {
   return (
     <Link
       to={'/app'}
-      className={`relative mt-4 w-full min-h-16 border-stone-700 ${location.pathname == '/app' && 'border-stone-700 border-y'} transition-all flex justify-between items-center px-3.5 hover:bg-white hover:bg-opacity-15`}
+      className={`relative mt-4 w-full min-h-16 border-stone-700 ${location.pathname == '/app' && 'border-stone-700 border-y'} transition-all flex justify-between items-center px-4 hover:bg-white hover:bg-opacity-15`}
     >
       <div className={`flex items-center`}>
         <img src={HomeImage} alt="" className={`w-10`} />

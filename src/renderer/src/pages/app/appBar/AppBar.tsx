@@ -7,7 +7,9 @@ export const AppBarContext = createContext<any>(null)
 
 const AppBar = (): JSX.Element => {
   return (
-    <div className={`min-w-52 h-full bg-[#1e1e1e] text-white flex flex-col justify-between overflow-hidden shadow`}>
+    <div
+      className={`min-w-52 h-full bg-[#1e1e1e] text-white flex flex-col justify-between overflow-hidden border-r border-stone-900`}
+    >
       <div className={`w-full h-full flex-grow flex flex-col`}>
         <BarAccountComp />
         <BarVersionComp />

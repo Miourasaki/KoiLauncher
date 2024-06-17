@@ -1,9 +1,10 @@
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { createContext, useEffect, useState } from 'react'
 import MainHeader from '../../components/mainHeader'
 import AppBar from './appBar/AppBar'
 import './comp/AppIndex.css'
-import AppOptions from "./AppOptions";
+import AppOptions from './AppOptions'
+import AppArticles from './AppArticles'
 
 export const AppContext = createContext<any>(null)
 
@@ -46,33 +47,38 @@ const AppIndexPage = () => {
   }, [])
 
   const Index = () => {
-    return (<>
-      <div>{JSON.stringify(accountMeta)}</div>
-      <div>{location.pathname}</div>
-    </>)
+    return (
+      <>
+        <div>{JSON.stringify(accountMeta)}</div>
+        <div>{location.pathname}</div>
+      </>
+    )
   }
 
-
   return (
-    <AppContext.Provider
-      value={{
-        accountName,
-        setAccountName,
-        accountType,
-        setAccountType
-      }}
-    >
-      <MainHeader />
-      <div className={`w-full h-full flex bg-[#333333] relative`}>
-        <AppBar />
-        <div className={`w-full h-full`}>
-          <Routes>
-            <Route index element={<Index />} />
-            <Route path={'options'} element={<AppOptions />} />
-          </Routes>
+    <>
+      <AppContext.Provider
+        value={{
+          accountMeta,
+          accountName,
+          setAccountName,
+          accountType,
+          setAccountType
+        }}
+      >
+        <MainHeader />
+        <div className={`w-full h-full flex bg-[#333333] relative text-white overflow-hidden`}>
+          <AppBar />
+          <div className={`w-full h-full overflow-y-auto`}>
+            <Routes>
+              <Route index element={<Index />} />
+              <Route path={'articles/*'} element={<AppArticles />} />
+              <Route path={'options/*'} element={<AppOptions />} />
+            </Routes>
+          </div>
         </div>
-      </div>
-    </AppContext.Provider>
+      </AppContext.Provider>
+    </>
   )
 }
 

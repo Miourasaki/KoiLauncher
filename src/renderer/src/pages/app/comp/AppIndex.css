@@ -1,14 +1,37 @@
 .accountMenu {
-  animation: accountMenu .1s ease-out forwards;
+  animation: accountMenu .14s ease-out forwards;
 }
 
 @keyframes accountMenu {
-  from {
-    opacity: 0;
-    transform: translate(-50%, 90%);
+  0% {
+    opacity: 0.2;
+    transform: translate(-50%, 95%);
   }
-  to {
+  80% {
+    opacity: 0.8;
+
+  }
+  100% {
     opacity: 1;
     transform: translate(-50%, 100%);
+  }
+}
+
+.transMenu {
+  animation: transMenu .14s ease-out forwards;
+}
+
+@keyframes transMenu {
+  0% {
+    opacity: 0.2;
+    transform: translate(0%, 96%);
+  }
+  80% {
+    opacity: 0.8;
+
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0%, 100%);
   }
 }

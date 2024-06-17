@@ -4,8 +4,8 @@ import AppIndex from './pages/app/AppIndex'
 import { useEffect } from 'react'
 import About from './pages/About'
 import License from './pages/License'
-import NotificationContext from './components/notify/NotificationContext'
 import MainContextProvider from './components/CoreContext'
+import NotificationContext from './components/notify/NotificationContext'
 
 function App(): JSX.Element {
   useEffect(() => {

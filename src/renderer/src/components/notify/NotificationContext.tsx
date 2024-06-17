@@ -1,6 +1,7 @@
 import './Notification.css'
 import { createContext, ReactNode, useState } from 'react'
 import Notification, { Card } from './Notification'
+import { useLocation } from 'react-router-dom'
 
 interface NoteInterface {
   id: number
@@ -34,15 +35,19 @@ const NotificationContext = ({ children }: { children: ReactNode }): JSX.Element
   const deleteNotification = (id: number): void =>
     setNotifications(notifications.filter((notification) => notification.id !== id))
 
+  const location = useLocation()
+
   return (
     <NotificationContextCore.Provider
       value={{
+        notifications,
         createNotification
       }}
     >
       {children}
       <div
-        className={`fixed top-14 right-0 overflow-y-auto ofhide max-h-full flex flex-col z-30`}
+        className={`fixed right-0 overflow-y-auto ofhide max-h-full flex z-30
+        ${location.pathname.split('/')[1] === 'app' ? 'bottom-5 flex-col-reverse' : 'top-14 flex-col'}`}
       >
         {notifications.map(({ id, card, title, body }) => {
           return (

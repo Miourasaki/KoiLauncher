@@ -27,6 +27,10 @@ const MainContextProvider = ({ children }: { children: ReactNode }) => {
       index++
     }
 
+    const ownedList = []
+    // @ts-ignore
+    msg.minecraftMeta.minecraftAccessMeta.mcstoreMeta.items.map((item: any) => ownedList.push(item.name))
+
     const localData = {
       refreshToken: Encrypt(msg.microsoftMeta.refreshToken),
       accessToken: Encrypt(msg.minecraftMeta.minecraftTokenMeta.access_token),
@@ -34,7 +38,8 @@ const MainContextProvider = ({ children }: { children: ReactNode }) => {
         id: uuid,
         name: msg.minecraftMeta.minecraftAccessMeta.profileMeta.name,
         skin: mcSkin
-      }
+      },
+      ownedList: ownedList
     }
     // const base64LocalData = btoa(JSON.stringify(localData))
     const key = `account.microsoftAccount.${uuid}`

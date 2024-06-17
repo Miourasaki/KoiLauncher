@@ -84,7 +84,10 @@ const Notification: React.FC<NotificationProps> = ({
   }, [])
 
   return (
-    <div style={{ maxHeight: `${mainEleHeight}px` }} className={`${mainEleHeight==0 && 'hidden'}`}>
+    <div
+      style={{ maxHeight: `${mainEleHeight}px` }}
+      className={`${mainEleHeight == 0 && 'hidden'}`}
+    >
       <div
         ref={mainRef}
         className={`notification flex bg-[#474747] mb-1.5 shadow-sm ${isClosing ? 'slideOut' : 'slideIn'}`}
