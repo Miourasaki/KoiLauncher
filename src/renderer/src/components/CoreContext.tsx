@@ -10,7 +10,7 @@ const MainContextProvider = ({ children }: { children: ReactNode }) => {
     const result: any = {
       accountType: 'microsoft',
       accountProfile: msg.minecraftMeta.minecraftAccessMeta.profileMeta,
-      accessToken: msg.minecraftMeta.minecraftTokenMeta.access_token,
+      accessToken: msg.minecraftMeta.minecraftToken,
       microsoftAccess: {
         mcstoreMeta: msg.minecraftMeta.minecraftAccessMeta.mcstoreMeta
       }
@@ -40,7 +40,7 @@ const MainContextProvider = ({ children }: { children: ReactNode }) => {
 
     const localData = {
       refreshToken: Encrypt(msg.microsoftMeta.refreshToken),
-      // accessToken: Encrypt(msg.minecraftMeta.minecraftTokenMeta.access_token),
+      accessToken: Encrypt(msg.minecraftMeta.minecraftToken),
       minecraftMeta: {
         id: uuid,
         name: msg.minecraftMeta.minecraftAccessMeta.profileMeta.name,

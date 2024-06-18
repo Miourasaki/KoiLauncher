@@ -34,7 +34,7 @@ const AppOptions = () => {
   const { id } = useParams()
   const { setAccountMetaDef } = useContext(MainContext)
 
-  const getMeta = false
+  const getMeta = true
   const [load, setLoad] = useState(getMeta)
   const [error, setError] = useState('')
 
@@ -76,7 +76,7 @@ const AppOptions = () => {
 
   const pushToken = () => {
     setError('')
-    window.electron.ipcRenderer.send('auth:ms-in', Decrypt(msAccountMeta.refreshToken))
+    window.electron.ipcRenderer.send('auth:ms-in', [Decrypt(msAccountMeta.refreshToken), Decrypt(msAccountMeta.accessToken)])
   }
 
 

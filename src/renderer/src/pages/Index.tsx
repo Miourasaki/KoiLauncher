@@ -132,7 +132,11 @@ const Index = (): JSX.Element => {
             const refreshToken = mainStorage.getItem(
               `account.microsoftAccount.${uuid}`
             ).refreshToken
-            window.electron.ipcRenderer.send('auth:ms-in', Decrypt(refreshToken))
+            // @ts-ignore
+            const accessToken = mainStorage.getItem(
+              `account.microsoftAccount.${uuid}`
+            ).accessToken
+            window.electron.ipcRenderer.send('auth:ms-in', [Decrypt(refreshToken), Decrypt(accessToken)])
             return
           }
         }

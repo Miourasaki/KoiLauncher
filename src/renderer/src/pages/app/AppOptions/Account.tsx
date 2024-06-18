@@ -40,29 +40,30 @@ const Account = () => {
             <MsAccountItem key={key} id={key} msAccount={msAccountList[key]} />
           ))}
         </div>
-        <AppButton onClick={() => push('/auth/login')} className={`ml-9 mt-5 mb-8 px-3.5 w-auto`}>
-          {t('meta.option.account.addAccount')}
+        <AppButton onClick={() => push("/auth/login")} className={`ml-9 mt-5 mb-8 px-3.5 w-auto`}>
+          {t("meta.option.account.addAccount")}
         </AppButton>
       </AppItem>
       <AppItem title={<OfflineLogo />}>
         <div className={`mt-5 flex flex-col gap-2`}>
           <AppButton onClick={() => setChangeOfflineIdMenu(true)} className={`w-[38rem]`}>
-            {t('meta.option.account.offline.changeId')}
+            {t("meta.option.account.offline.changeId")}
           </AppButton>
           <AppButton
             onClick={() => {
-              sessionStorage.clear()
+              sessionStorage.clear();
               // @ts-ignore
-              mainStorage.setItem('account.masterType', 'offline')
-              push('/')
+              mainStorage.setItem("account.masterType", "offline");
+              push("/");
             }}
             changColor={true}
             className={`w-[38rem] bg-[#d98b9b] hover:bg-[#8c5964] border-0 mt-3`}
           >
-            {t('meta.option.account.offline.use')}
+            {t("meta.option.account.offline.use")}
           </AppButton>
         </div>
       </AppItem>
+      <div className={`h-10`}></div>
     </>
   )
 }
@@ -196,6 +197,7 @@ const MsAccountItem = ({ id, msAccount }: { id: string; msAccount: any }) => {
         </div>
       </div>
     </button>
+
   )
 }
 

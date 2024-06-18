@@ -108,7 +108,7 @@ const microsoftLogin = (event: Electron.IpcMainEvent): void => {
   }
 }
 const log = (s: string = ''): void => {
-  if (typeof s == 'boolean') console.log(s)
+  if (typeof s == 'string') console.log(s)
 }
 const getMicrosoftToken = (code: string): Promise<Map<string, string>> => {
   log('Minecraft Token get Program Start')
@@ -198,7 +198,7 @@ export const getMinecraftProfileWithRefreshToken = (
     .catch((r) => event.reply('auth:ms-out', `error:${r}`))
 }
 
-const mainFunc = (code: string = '', refreshToken: string = ''): Promise<any> => {
+const mainFunc = (code: string = '', refreshToken: string[] = []): Promise<any> => {
   return new Promise((resolve, reject) => {
     if (code != '') {
       getMicrosoftToken(code)
@@ -208,14 +208,26 @@ const mainFunc = (code: string = '', refreshToken: string = ''): Promise<any> =>
             .catch((e) => reject(e))
         )
         .catch((e) => reject(e))
-    } else if (refreshToken != '') {
-      getMicrosoftTokenWithRefreshToken(refreshToken)
-        .then((r) =>
-          mainDef(r)
-            .then((r) => resolve(r))
+    } else if (refreshToken.length > 0) {
+      getMinecraftProfile(refreshToken[1])
+        .then((r) => resolve({
+          microsoftMeta: {
+            refreshToken: refreshToken[0]
+          },
+          minecraftMeta: {
+            minecraftToken: refreshToken[1],
+            minecraftAccessMeta: r
+          }
+        }))
+        .catch(() => {
+          getMicrosoftTokenWithRefreshToken(refreshToken[0])
+            .then((r) =>
+              mainDef(r)
+                .then((r) => resolve(r))
+                .catch((e) => reject(e))
+            )
             .catch((e) => reject(e))
-        )
-        .catch((e) => reject(e))
+        })
     }
 
     const mainDef = (msToken: Map<string, string>): Promise<any> => {
@@ -230,7 +242,7 @@ const mainFunc = (code: string = '', refreshToken: string = ''): Promise<any> =>
                     refreshToken: msToken.get('refresh_token')
                   },
                   minecraftMeta: {
-                    minecraftTokenMeta: result,
+                    minecraftToken: result.access_token,
                     minecraftAccessMeta: r
                   }
                 })
