@@ -1,24 +1,27 @@
-import AppHeader from './comp/AppHeader'
+import { FlexAppHeader } from "./comp/AppHeader";
 import AppRoute from './comp/AppRoute'
 import Launcher from './AppOptions/Launcher'
-import Account from "./AppOptions/Account";
+import Account from './AppOptions/Account'
+import { useTranslation } from "react-i18next";
 
 const AppOptions = () => {
+  const {t} = useTranslation()
+
   const headerList = [
     {
-      text: '通用',
-      to: 'main'
+      text: t('meta.option.game.title'),
+      to: 'game'
     },
     {
-      text: '账户',
+      text: t('meta.option.account.title'),
       to: 'account'
     },
     {
-      text: '启动器',
+      text: t('meta.option.launcher.title'),
       to: 'launcher'
     },
     {
-      text: '关于',
+      text: t('meta.option.about.title'),
       // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
       to: () => window.electron.ipcRenderer.send('window:openAbout')
     }
@@ -26,15 +29,15 @@ const AppOptions = () => {
 
   return (
     <>
-      <AppHeader title={`首选项`} list={headerList} />
-
-      <AppRoute path={'main'}></AppRoute>
-      <AppRoute path={'account'}>
-        <Account />
-      </AppRoute>
-      <AppRoute path={'launcher'}>
-        <Launcher />
-      </AppRoute>
+      <FlexAppHeader title={t('meta.option.title')} list={headerList}>
+        <AppRoute path={'game'}></AppRoute>
+        <AppRoute path={'account'}>
+          <Account />
+        </AppRoute>
+        <AppRoute path={'launcher'}>
+          <Launcher />
+        </AppRoute>
+      </FlexAppHeader>
     </>
   )
 }

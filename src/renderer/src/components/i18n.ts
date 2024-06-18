@@ -14,7 +14,7 @@ i18n
   // 所有配置选项: https://www.i18next.com/overview/configuration-options
   .init({
     resources,
-    fallbackLng: 'en',
+    fallbackLng: ['en', 'zh-CN'],
     lng: localStorageLanguage,
     // lng: 'en',
     debug: false,

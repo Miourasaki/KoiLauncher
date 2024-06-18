@@ -12,7 +12,7 @@ const AppItem = ({
   return (
     <div>
       <div className={`mt-10 ml-9 text-[0.8rem] font-semibold mb-1`}>{title}</div>
-      <div className={`text-sm ${margin && `ml-9`}`}>{children}</div>
+      <div className={`w-full text-sm ${margin && `ml-9`}`}>{children}</div>
     </div>
   )
 }

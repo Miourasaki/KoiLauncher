@@ -12,7 +12,7 @@ const Launcher = () => {
 
   return (
     <>
-      <AppItem title={`语言`}>
+      <AppItem title={t('meta.option.launcher.language')}>
         <AppSelect selected={t('lang')}>
           {Object.keys(i18nData).map((key) => (
             <AppSelectList

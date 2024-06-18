@@ -81,8 +81,8 @@ const MainHeader = ({
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="20"
-            height="20"
+            width="21"
+            height="21"
             fill="currentColor"
             className="mt-[0.1rem]"
             viewBox="0 0 16 16"

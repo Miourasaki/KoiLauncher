@@ -42,7 +42,7 @@ const BarLink = ({
       <div></div>
 
       <span
-        className={`bg-[#c88f9b] absolute w-[0.2rem] left-0 duration-100 transition-all ${classBool() ? 'h-2/5' : 'h-0'}`}
+        className={`bg-[#c88f9b] absolute w-1 left-0 duration-100 transition-all ${classBool() ? 'h-2/5' : 'h-0'}`}
       ></span>
     </Link>
   )

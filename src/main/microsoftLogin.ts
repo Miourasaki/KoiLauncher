@@ -267,9 +267,9 @@ const getMinecraftProfile = (mcAccessToken: string): Promise<any> => {
                 profileMeta: pr.data
               })
             )
-            .catch(() => reject('i18n|error.msAccount.failure2'))
+            .catch(() => reject('i18n|error.msAccount.mojang.failure'))
         })
-        .catch(() => reject('i18n|error.msAccount.failure1'))
+        .catch(() => reject('i18n|error.msAccount.mojang.failure'))
     }, 2000)
   })
 }

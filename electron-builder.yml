@@ -15,7 +15,7 @@ win:
   executableName: Koi Launcher
   target:
     - portable
-#    - nsis
+    - nsis
 #    - nsis-web
 #    - AppX
 nsis:

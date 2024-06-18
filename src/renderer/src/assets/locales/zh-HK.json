@@ -1,7 +1,32 @@
 {
   "lang": "繁體中文 - 香港特別行政區",
 
+  "all.ok": "好👌",
+
+
   "meta.building": "構建開發中...",
+  "meta.account.type.microsoft": "Microsoft賬戶",
+  "meta.account.type.offline": "離綫模式",
+  "meta.account.menu.help": "取得啓動器幫助",
+  "meta.account.menu.label.change": "切換賬戶",
+  "meta.account.menu.allAccount": "查看所有賬戶",
+  "meta.account.menu.addAccount": "添加賬戶",
+
+  "meta.menu.updateLog": "有什麽新内容？",
+  "meta.menu.launcherOption": "啓動器設置",
+
+  "meta.option.title": "首選項",
+  "meta.option.game.title": "通用",
+  "meta.option.account.title": "賬戶",
+  "meta.option.account.owned": "已購：",
+  "meta.option.account.addAccount": "添加賬戶",
+  "meta.option.account.using": "已登錄",
+  "meta.option.account.offline.changeId": "修改離綫模式id",
+  "meta.option.account.offline.use": "使用離綫賬戶",
+  "meta.option.launcher.title": "啓動器",
+  "meta.option.launcher.language": "語言",
+  "meta.option.about.title": "關於",
+
 
   "login.title": "添加本地帳號",
   "login.microsoft": "使用Microsoft登錄",

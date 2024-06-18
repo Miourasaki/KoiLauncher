@@ -1,7 +1,32 @@
 {
   "lang": "文言 - 華夏",
 
+  "all.ok": "允",
+
+
   "meta.building": "構建開發中...",
+  "meta.account.type.microsoft": "微軟戶",
+  "meta.account.type.offline": "盜",
+  "meta.account.menu.help": "得助之",
+  "meta.account.menu.label.change": "出入戶",
+  "meta.account.menu.allAccount": "悉視諸戶",
+  "meta.account.menu.addAccount": "添戶",
+
+  "meta.menu.updateLog": "有何新？",
+  "meta.menu.launcherOption": "設",
+
+  "meta.option.title": "設",
+  "meta.option.game.title": "簡常",
+  "meta.option.account.title": "戶簿",
+  "meta.option.account.owned": "所有：",
+  "meta.option.account.addAccount": "添戶",
+  "meta.option.account.using": "用中",
+  "meta.option.account.offline.changeId": "改盜名",
+  "meta.option.account.offline.use": "使盜戶",
+  "meta.option.launcher.title": "發初器具",
+  "meta.option.launcher.language": "文",
+  "meta.option.about.title": "有涉",
+
 
   "login.title": "添加本地帳號",
   "login.microsoft": "用微軟戶识审也",

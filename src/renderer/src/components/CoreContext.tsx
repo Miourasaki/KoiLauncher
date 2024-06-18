@@ -6,7 +6,7 @@ export const MainContext = createContext<any>(null)
 const MainContextProvider = ({ children }: { children: ReactNode }) => {
   const [accountMeta, setAccountMeta] = useState<any>(null)
 
-  const setAccountMetaDef = (msg: any): void => {
+  const setAccountMetaDef = (msg: any, save: boolean = true): void => {
     const result: any = {
       accountType: 'microsoft',
       accountProfile: msg.minecraftMeta.minecraftAccessMeta.profileMeta,
@@ -26,6 +26,13 @@ const MainContextProvider = ({ children }: { children: ReactNode }) => {
       if (mcSkins[index]['state'] == 'ACTIVE') mcSkin = mcSkins[index]['url']
       index++
     }
+    const mcCapes: any[] = msg.minecraftMeta.minecraftAccessMeta.profileMeta.capes
+    let mcCape: string | null = null
+    index = 0
+    while (index < mcSkins.length) {
+      if (mcCapes[index]['state'] == 'ACTIVE') mcCape = mcCapes[index]['url']
+      index++
+    }
 
     const ownedList = []
     // @ts-ignore
@@ -33,11 +40,13 @@ const MainContextProvider = ({ children }: { children: ReactNode }) => {
 
     const localData = {
       refreshToken: Encrypt(msg.microsoftMeta.refreshToken),
-      accessToken: Encrypt(msg.minecraftMeta.minecraftTokenMeta.access_token),
+      // accessToken: Encrypt(msg.minecraftMeta.minecraftTokenMeta.access_token),
       minecraftMeta: {
         id: uuid,
         name: msg.minecraftMeta.minecraftAccessMeta.profileMeta.name,
-        skin: mcSkin
+        skin: mcSkin,
+        cape: mcCape,
+        capes: mcCapes,
       },
       ownedList: ownedList
     }
@@ -55,7 +64,7 @@ const MainContextProvider = ({ children }: { children: ReactNode }) => {
       }
     }
     // @ts-ignore
-    mainStorage.setItem(`account.masterType`, 'online:' + uuid)
+    if (save) mainStorage.setItem(`account.masterType`, 'online:' + uuid)
     // const msAccountList = localStorage.getItem('msAccount.list')
     // if (msAccountList == null) localStorage.setItem('msAccount.list', JSON.stringify([uuid]))
     // else

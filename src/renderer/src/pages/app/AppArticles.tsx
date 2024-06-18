@@ -1,4 +1,4 @@
-import AppHeader from './comp/AppHeader'
+import { FlexAppHeader } from "./comp/AppHeader";
 import AppRoute from './comp/AppRoute'
 
 const AppArticles = () => {
@@ -19,11 +19,11 @@ const AppArticles = () => {
 
   return (
     <>
-      <AppHeader title={`文章`} list={headerList} />
-
-      <AppRoute path={'news'}>news</AppRoute>
-      <AppRoute path={'update-log'}>update-log</AppRoute>
-      <AppRoute path={'faq'}>faq=</AppRoute>
+      <FlexAppHeader title={`文章`} list={headerList}>
+        <AppRoute path={'news'}>news</AppRoute>
+        <AppRoute path={'update-log'}>update-log</AppRoute>
+        <AppRoute path={'faq'}>faq=</AppRoute>
+      </FlexAppHeader>
     </>
   )
 }

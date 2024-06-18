@@ -1,9 +1,8 @@
 import HomeImage from '../../../assets/img/head/fbb19e19c74df50c285883e54babecc9.webp'
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from 'react-router-dom'
 
 const BarVersionComp = (): JSX.Element => {
-
-  const location = useLocation();
+  const location = useLocation()
 
   return (
     <Link
@@ -13,13 +12,13 @@ const BarVersionComp = (): JSX.Element => {
       <div className={`flex items-center`}>
         <img src={HomeImage} alt="" className={`w-10`} />
         <div className={`ml-2.5 leading-5 flex flex-col items-start`}>
-          <div></div>
+          <div>HOME</div>
         </div>
       </div>
       <div></div>
 
       <span
-        className={`bg-white   absolute w-1 left-0 duration-100 transition-all ${location.pathname == '/app' ? 'h-2/5' : 'h-0'}`}
+        className={`bg-white absolute w-1 left-0 duration-100 transition-all ${location.pathname == '/app' ? 'h-2/5' : 'h-0'}`}
       ></span>
     </Link>
   )

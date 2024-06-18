@@ -1,9 +1,33 @@
 {
   "lang": "English - All",
 
+  "all.ok": "OK",
+
+
   "meta.building": "In development...",
   "meta.account.type.microsoft": "Microsoft Account",
-  "meta.account.type.offline": "Offline Account",
+  "meta.account.type.offline": "Offline Mode",
+
+  "meta.account.menu.help": "Get Help",
+  "meta.account.menu.label.change": "Account",
+  "meta.account.menu.allAccount": "Accounts list",
+  "meta.account.menu.addAccount": "Add Account",
+
+  "meta.menu.updateLog": "What's new?",
+  "meta.menu.launcherOption": "Options",
+
+  "meta.option.title": "Options",
+  "meta.option.game.title": "GAME",
+  "meta.option.account.title": "Account",
+  "meta.option.account.owned": "Purchased: ",
+  "meta.option.account.addAccount": "Add Account",
+  "meta.option.account.using": "USING",
+  "meta.option.account.offline.changeId": "Modify Offline Mode id",
+  "meta.option.account.offline.use": "Use an Offline Mode",
+  "meta.option.launcher.title": "Launcher",
+  "meta.option.launcher.language": "Language",
+  "meta.option.about.title": "About",
+
 
   "login.title": "Add Account",
   "login.microsoft": "WITH Microsoft",
@@ -13,6 +37,7 @@
   "login.other": "Use\tAnother\tor\tSetup Later",
 
   "error.msAccount.failure": "Error connecting to authentication server.",
+  "error.msAccount.mojang.failure": "Error connecting to mojang verify server.",
   "error.msAccount.window.networkError": "Unable to link Microsoft Oauth program, please check network connection.",
   "error.msAccount.xbox.unregistered": "Xbox Live service is not enabled for this Microsoft account.",
   "error.msAccount.minecraft.notOwned": "This Microsoft account has not purchased Minecraft related games.",

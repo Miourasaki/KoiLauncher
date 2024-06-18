@@ -1,12 +1,13 @@
 import { useContext, useEffect, useState } from 'react'
 import { NotificationContextCore } from '../../../components/notify/NotificationContext'
-import defaultAvatar from '../../../assets/img/logo-koishi-100-export.png'
+// import defaultAvatar from '../../../assets/img/logo-koishi-100-export.png'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import MainCard from '../../../components/MainCard'
 import gsap from 'gsap'
 import { Card } from '../../../components/notify/Notification'
 import { AppContext } from '../AppIndex'
+import AppButton from '../comp/AppButton'
 
 const BarAccountComp = (): JSX.Element => {
   const { createNotification } = useContext(NotificationContextCore)
@@ -16,7 +17,7 @@ const BarAccountComp = (): JSX.Element => {
 
   useEffect(() => {}, [])
 
-  const { accountName, setAccountName, accountType } = useContext(AppContext)
+  const { accountName, setAccountName, accountType, accountMeta, changeOfflineIdMenu, setChangeOfflineIdMenu } = useContext(AppContext)
 
   const ChangeOfflineName = ({ classBool }: { classBool: boolean }): JSX.Element => {
     const [inputClass, setInputClass] = useState(false)
@@ -83,7 +84,7 @@ const BarAccountComp = (): JSX.Element => {
           className={`w-full h-full px-10 py-14 flex flex-col justify-between items-start`}
         >
           <div className={`w-full`}>
-            <div className={`tracking-wide text-2xl font-semibold`}>修改离线模式id</div>
+            <div className={`tracking-wide text-2xl font-semibold`}>{t('meta.option.account.offline.changeId')}</div>
             <div className={`mt-8`}>
               <input
                 id={`offline-id-input`}
@@ -93,9 +94,7 @@ const BarAccountComp = (): JSX.Element => {
             </div>
           </div>
           <div className={`w-full flex justify-end gap-2`}>
-            <button className={`h-9 w-32 bg-[#d98b9b] hover:bg-[#3f282c] transition-all`}>
-              好
-            </button>
+            <AppButton className={`h-9 min-w-full transition-all`}>{t('all.ok')}</AppButton>
           </div>
         </form>
       </MainCard>
@@ -111,6 +110,7 @@ const BarAccountComp = (): JSX.Element => {
       setChangeOfflineIdClass(bool)
       setTimeout(() => setChangeOfflineId(bool), 200)
     }
+    setChangeOfflineIdMenu(bool)
   }
   const OfflineName = (): JSX.Element => {
     if (accountName == null)
@@ -149,6 +149,9 @@ const BarAccountComp = (): JSX.Element => {
       </button>
     )
   }
+  useEffect(() => {
+    changeChangeOfflineId(changeOfflineIdMenu)
+  }, [changeOfflineIdMenu])
 
   const [accountMenu, setAccountMenu] = useState(false)
   useEffect(() => {
@@ -179,7 +182,7 @@ const BarAccountComp = (): JSX.Element => {
               className={`w-8 rounded-full`}
             />
           ) : (
-            <img src={defaultAvatar} alt="" className={`w-8 rounded-full`} />
+            <></> // <img src={defaultAvatar} alt="" className={`w-8 rounded-full`} />
           )}
           <div className={`ml-2.5 leading-5 flex flex-col items-start`}>
             <div className={`text-[0.9rem]`}>
@@ -219,10 +222,16 @@ const BarAccountComp = (): JSX.Element => {
               to={'/app/articles#faq'}
               className={`px-3 py-1.5 hover:bg-[#c88f9b] w-full flex items-center`}
             >
-              <div className={`ml-2`}>获取启动器帮助</div>
+              <div className={`ml-2`}>{t('meta.account.menu.help')}</div>
+            </Link>
+            <Link
+              to={`${accountType == 'microsoft' ? `/app/account/${accountMeta.accountProfile.id}/microsoft#main`:`/app/options#account`}`}
+              className={`px-3 py-1.5 hover:bg-[#c88f9b] w-full flex items-center`}
+            >
+              <div className={`ml-2`}>账户设置</div>
             </Link>
             <div className={`mb-0.5 mt-2 text-[0.6rem] px-3 text-stone-400 w-full flex`}>
-              切换账户 -
+              {t('meta.account.menu.label.change')} -
             </div>
             <Link
               to={'/app/options#account'}
@@ -241,7 +250,7 @@ const BarAccountComp = (): JSX.Element => {
                   d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
                 />
               </svg>
-              <div className={`ml-2`}>查看所有账号</div>
+              <div className={`ml-2`}>{t('meta.account.menu.allAccount')}</div>
             </Link>
             <Link
               to={'/auth/login'}
@@ -258,7 +267,7 @@ const BarAccountComp = (): JSX.Element => {
                 <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
                 <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
               </svg>
-              <div className={`ml-2`}>新增账号</div>
+              <div className={`ml-2`}>{t('meta.account.menu.addAccount')}</div>
             </Link>
           </div>
         )}

@@ -5,6 +5,7 @@ import AppBar from './appBar/AppBar'
 import './comp/AppIndex.css'
 import AppOptions from './AppOptions'
 import AppArticles from './AppArticles'
+import AppAccount from "./AppAccount";
 
 export const AppContext = createContext<any>(null)
 
@@ -30,6 +31,8 @@ const AppIndexPage = () => {
 
   const [accountName, setAccountName] = useState('')
   const [accountType, setAccountType] = useState('')
+
+  const [changeOfflineIdMenu, setChangeOfflineIdMenu] = useState(false)
 
   useEffect(() => {
     const baseAccountMeta = sessionStorage.getItem('accountMeta')
@@ -63,17 +66,21 @@ const AppIndexPage = () => {
           accountName,
           setAccountName,
           accountType,
-          setAccountType
+          setAccountType,
+
+          changeOfflineIdMenu,
+          setChangeOfflineIdMenu
         }}
       >
         <MainHeader />
         <div className={`w-full h-full flex bg-[#333333] relative text-white overflow-hidden`}>
           <AppBar />
-          <div className={`w-full h-full overflow-y-auto`}>
+          <div className={`w-full flex-grow h-full overflow-y-auto`}>
             <Routes>
               <Route index element={<Index />} />
               <Route path={'articles/*'} element={<AppArticles />} />
               <Route path={'options/*'} element={<AppOptions />} />
+              <Route path={'account/:id/microsoft'} element={<AppAccount />} />
             </Routes>
           </div>
         </div>

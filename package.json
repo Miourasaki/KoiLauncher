@@ -1,10 +1,10 @@
 {
   "name": "KoiLauncher",
-  "version": "0.0.601",
+  "version": "0.0.4064",
   "description": "A Minecraft Game Launcher",
   "main": "./out/main/index.js",
-  "author": "Miourasaki.NET",
-  "homepage": "https://miourasaki.net",
+  "author": "Koi Archive",
+  "homepage": "https://koi.miourasaki.net",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
@@ -35,7 +35,9 @@
     "qs": "^6.12.1",
     "react-i18next": "^14.1.2",
     "react-router-dom": "^6.23.1",
-    "react-transition-group": "^4.4.5"
+    "react-skinview3d": "^5.1.0",
+    "react-transition-group": "^4.4.5",
+    "skinview3d": "^3.0.1"
   },
   "devDependencies": {
     "@electron-toolkit/eslint-config-prettier": "^2.0.0",

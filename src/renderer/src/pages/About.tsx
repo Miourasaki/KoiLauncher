@@ -183,15 +183,15 @@ function About(): JSX.Element {
               <div className={`mt-0.5`}>Privacy Statement</div>
             </a>
           </div>
-          <div className={`tracking-wider text-sm`}>
+          <div className={`tracking-wider text-[0.9rem]`}>
             Copyright © 2024{' '}
             <a
-              href={'https://mio.am'}
+              href={'https://koi.miourasaki.net'}
               target={'_blank'}
-              className={`hover:text-red-500 transition-all`}
+              className={`hover:text-[#d98b9b] transition-all`}
               rel="noreferrer"
             >
-              Miourasaki.NET
+              KoIArchive Developer
             </a>
           </div>
         </div>

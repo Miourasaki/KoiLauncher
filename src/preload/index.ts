@@ -13,13 +13,13 @@ const api = {
     },
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    getItem(key: string) {
+    getItem: (key: string) => {
       return ipcRenderer.sendSync('store:getItem', key)
     },
 
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    removeItem(key: string) {
-      return ipcRenderer.sendSync('store:removeItem', key)
+    removeItem: (key: string) => {
+      ipcRenderer.send('store:removeItem', key)
     }
   }
 }
