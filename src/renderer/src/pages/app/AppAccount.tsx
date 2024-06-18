@@ -34,7 +34,7 @@ const AppOptions = () => {
   const { id } = useParams()
   const { setAccountMetaDef } = useContext(MainContext)
 
-  const getMeta = true
+  const getMeta = false
   const [load, setLoad] = useState(getMeta)
   const [error, setError] = useState('')
 
