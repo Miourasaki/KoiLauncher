@@ -7,10 +7,47 @@ import { AppContext } from '../AppIndex'
 import AppButton from '../comp/AppButton'
 import { useTranslation } from 'react-i18next'
 
+const OfflineName = (): JSX.Element => {
+
+  const { setChangeOfflineIdMenu } = useContext(AppContext)
+
+  // @ts-ignore
+  const accountName = mainStorage.getItem('account.offlineAccount.id')
+
+  if (accountName == null)
+    return (
+      <button
+        onClick={(_) => {
+          _.stopPropagation()
+          setChangeOfflineIdMenu(true)
+        }}
+        className={`w-[38rem] pointer-events-auto text-stone-300 bg-stone-700 px-2 border-dashed border-black border hover:bg-stone-800 hover:shadow-inner transition-all`}
+      >
+        设置离线id
+      </button>
+    )
+
+  return (
+    <button
+      onClick={(_) => {
+        _.stopPropagation()
+        setChangeOfflineIdMenu(true)
+      }}
+      className={`w-[38rem] pointer-events-auto hover:bg-[#131313] hover:px-1.5 rounded-sm transition-all flex items-center`}
+    >
+      {accountName}
+      <svg width="10" height="10" fill="currentColor" className="ml-2" viewBox="0 0 16 16">
+        <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z" />
+      </svg>
+    </button>
+  )
+}
+
+
 const Account = () => {
   const push = useNavigate()
   const { t } = useTranslation()
-  const { accountType, setChangeOfflineIdMenu } = useContext(AppContext)
+  const { accountType } = useContext(AppContext)
 
   const MicrosoftLogo = (): JSX.Element => {
     return <img src={MicrosoftLogin} alt="" className={`h-5`} />
@@ -34,21 +71,24 @@ const Account = () => {
 
   return (
     <>
-      <AppItem title={<MicrosoftLogo />} margin={false}>
-        <div className={`mt-3.5 w-[calc(100%-0.04rem)] -translate-x-[0.02rem]`}>
-          {Object.keys(msAccountList).map((key: string) => (
-            <MsAccountItem key={key} id={key} msAccount={msAccountList[key]} />
-          ))}
-        </div>
-        <AppButton onClick={() => push("/auth/login")} className={`ml-9 mt-5 mb-8 px-3.5 w-auto`}>
-          {t("meta.option.account.addAccount")}
-        </AppButton>
-      </AppItem>
+        <AppItem title={<MicrosoftLogo />} margin={false}>
+          <div className={`mt-3.5 w-[calc(100%-0.04rem)] -translate-x-[0.02rem]`}>
+            {msAccountList && <>
+              {Object.keys(msAccountList).map((key: string) => (
+                <MsAccountItem key={key} id={key} msAccount={msAccountList[key]} />
+              ))}
+            </>}
+          </div>
+          <AppButton onClick={() => push("/auth/login")} className={`ml-9 mt-5 mb-8 px-3.5 w-auto`}>
+            {t("meta.option.account.addAccount")}
+          </AppButton>
+        </AppItem>
       <AppItem title={<OfflineLogo />}>
         <div className={`mt-5 flex flex-col gap-2`}>
-          <AppButton onClick={() => setChangeOfflineIdMenu(true)} className={`w-[38rem]`}>
-            {t("meta.option.account.offline.changeId")}
-          </AppButton>
+          <OfflineName />
+          {/*<AppButton onClick={() => setChangeOfflineIdMenu(true)} className={`w-[38rem]`}>*/}
+          {/*  {t("meta.option.account.offline.changeId")}*/}
+          {/*</AppButton>*/}
           <AppButton
             onClick={() => {
               sessionStorage.clear();

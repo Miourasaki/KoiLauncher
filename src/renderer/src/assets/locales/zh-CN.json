@@ -35,6 +35,7 @@
   "login.back": "原路返回启动器",
   "login.other": "使用\t离线账号\t或\t稍后设置",
 
+  "error.configure.object": "配置文件结构错误.",
   "error.msAccount.failure": "连接至Microsoft验证服务器时错误.",
   "error.msAccount.mojang.failure": "连接至Mojang验证服务器时错误.",
   "error.msAccount.window.networkError": "无法链接Microsoft Oauth程序，请检查网络连接",

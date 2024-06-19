@@ -136,6 +136,11 @@ const Index = (): JSX.Element => {
             const accessToken = mainStorage.getItem(
               `account.microsoftAccount.${uuid}`
             ).accessToken
+            if (refreshToken == null || accessToken == null) {
+              push('/auth/login')
+              createNotification(Card.error, t('error.configure.object'))
+              return;
+            }
             window.electron.ipcRenderer.send('auth:ms-in', [Decrypt(refreshToken), Decrypt(accessToken)])
             return
           }

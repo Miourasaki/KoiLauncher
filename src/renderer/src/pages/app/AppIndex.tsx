@@ -6,7 +6,6 @@ import './comp/AppIndex.css'
 import AppOptions from './AppOptions'
 import AppArticles from './AppArticles'
 import AppAccount from "./AppAccount";
-import { Encrypt } from "../../components/AES";
 
 export const AppContext = createContext<any>(null)
 

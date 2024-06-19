@@ -27,59 +27,61 @@ const BarAccountComp = (): JSX.Element => {
         <form
           onSubmit={(_) => {
             _.preventDefault()
-            // @ts-ignore
-            const formData = new FormData(_.target)
-            const newId = formData.get('id') + ''
+            if (accountType == 'offline') {
+              // @ts-ignore
+              const formData = new FormData(_.target)
+              const newId = formData.get('id') + ''
 
-            if (newId == '' || !/^\w+$/.test(newId)) {
-              setInputClass(true)
-              const tl = gsap.timeline({ paused: true }) // 创建一个暂停的时间线
+              if (newId == '' || !/^\w+$/.test(newId)) {
+                setInputClass(true)
+                const tl = gsap.timeline({ paused: true }) // 创建一个暂停的时间线
 
-              tl.to(
-                '#offline-id-input',
-                { duration: 0.1, x: '-40px', ease: 'Power1.easeInOut' },
-                'start'
-              ) // 向左移动10px
-                .to(
+                tl.to(
                   '#offline-id-input',
-                  { duration: 0.1, x: '140px', ease: 'Power1.easeInOut' },
-                  'start+=0.15'
-                ) // 向右移动10px
-                .to(
-                  '#offline-id-input',
-                  { duration: 0.1, x: '-20px', ease: 'Power1.easeInOut' },
-                  'start+=0.25'
-                ) // 向左移动5px，以减缓晃动
-                .to(
-                  '#offline-id-input',
-                  { duration: 0.1, x: '70px', ease: 'Power1.easeInOut' },
-                  'start+=0.35'
-                ) // 向左移动5px，以减缓晃动
-                .to(
-                  '#offline-id-input',
-                  { duration: 0.1, x: '0px', ease: 'Power1.easeInOut' },
-                  'start+=0.45'
-                ) // 回到初始位置
-              tl.play() // 开始播放动画
+                  { duration: 0.1, x: '-40px', ease: 'Power1.easeInOut' },
+                  'start'
+                ) // 向左移动10px
+                  .to(
+                    '#offline-id-input',
+                    { duration: 0.1, x: '140px', ease: 'Power1.easeInOut' },
+                    'start+=0.15'
+                  ) // 向右移动10px
+                  .to(
+                    '#offline-id-input',
+                    { duration: 0.1, x: '-20px', ease: 'Power1.easeInOut' },
+                    'start+=0.25'
+                  ) // 向左移动5px，以减缓晃动
+                  .to(
+                    '#offline-id-input',
+                    { duration: 0.1, x: '70px', ease: 'Power1.easeInOut' },
+                    'start+=0.35'
+                  ) // 向左移动5px，以减缓晃动
+                  .to(
+                    '#offline-id-input',
+                    { duration: 0.1, x: '0px', ease: 'Power1.easeInOut' },
+                    'start+=0.45'
+                  ) // 回到初始位置
+                tl.play() // 开始播放动画
 
-              // 如果你希望动画只播放一次，可以在动画结束后停止时间线
-              tl.eventCallback('onComplete', function () {
-                tl.pause() // 动画完成后暂停时间线
-              })
-              return
+                // 如果你希望动画只播放一次，可以在动画结束后停止时间线
+                tl.eventCallback('onComplete', function() {
+                  tl.pause() // 动画完成后暂停时间线
+                })
+                return
+              }
+
+              const result = JSON.parse(atob(sessionStorage.getItem('accountMeta') + ''))
+              result.accountProfile.id = newId
+              result.accountProfile.name = newId
+
+              setAccountName(newId)
+              // @ts-ignore
+              mainStorage.setItem('account.offlineAccount.id', newId)
+              sessionStorage.setItem('accountMeta', btoa(JSON.stringify(result)))
+
+              changeChangeOfflineId(false)
+              createNotification(Card.success, `设置离线id为 ${newId}`)
             }
-
-            const result = JSON.parse(atob(sessionStorage.getItem('accountMeta') + ''))
-            result.accountProfile.id = newId
-            result.accountProfile.name = newId
-
-            setAccountName(newId)
-            // @ts-ignore
-            mainStorage.setItem('account.offlineAccount.id', newId)
-            sessionStorage.setItem('accountMeta', btoa(JSON.stringify(result)))
-
-            changeChangeOfflineId(false)
-            createNotification(Card.success, `设置离线id为 ${newId}`)
           }}
           className={`w-full h-full px-10 py-14 flex flex-col justify-between items-start`}
         >

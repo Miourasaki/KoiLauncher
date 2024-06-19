@@ -1,20 +1,20 @@
 import ReactSkinview3d from "react-skinview3d";
 import { WalkingAnimation } from "skinview3d";
 import { useRef } from "react";
+import { Decrypt } from "../../../components/AES";
 
 const Skin = ({msAccountMeta}:{msAccountMeta:any}) => {
 
 
+  return (<div className={`w-full h-full flex items-center justify-center pr-6 pl-3`}>
 
-  return (<div className={`w-full h-full flex items-center justify-center px-10`}>
-
-    <div className={`flex w-full max-w-[45rem] h-5/6`}>
+    <div className={`flex w-full max-w-[49rem] h-5/6`}>
       <div className={`flex flex-col items-center w-52 border-r border-stone-500`}>
-        <div className={`font-semibold mr-10`}>当前使用</div>
+        <div className={`font-semibold mr-5`}>当前使用</div>
         <ReactSkinview3d
           width={`200`}
           height={`260`}
-          className={`mr-10 mt-5`}
+          className={`mr-5 mt-5`}
           skinUrl={msAccountMeta.minecraftMeta.skin}
           capeUrl={msAccountMeta.minecraftMeta.cape}
           onReady={({viewer}) => {
@@ -25,21 +25,42 @@ const Skin = ({msAccountMeta}:{msAccountMeta:any}) => {
           }}
         />
       </div>
-      <div className={`w-full h-full flex-grow overflow-hidden ml-10 flex flex-col items-center`}>
-        <div className={`font-semibold mr-10`}>当前使用</div>
-        <div>
+      <div className={`w-full h-full flex-grow  ml-8 flex flex-col items-center`}>
+        <div className={`font-semibold mr-7`}>设置皮肤</div>
+        <div className={`w-full`}>
+            <div className={`mt-10 mb-3 font-semibold flex justify-center mr-7`}>披风设置</div>
           {/*{JSON.stringify()}*/}
+          <div className={`flex gap-4 w-full items-start flex-wrap mb-10`}>
+            <button
+              onDoubleClick={() => {
+                if (window.electron.ipcRenderer.sendSync('mojangApi:deleteCape', Decrypt(msAccountMeta.accessToken)))
+                  location.reload()
+              }}
+              disabled={msAccountMeta.minecraftMeta.cape == null}
+              className={`flex flex-col items-center pt-4 pb-2 transition-all bg-white hover:bg-opacity-10 max-w-[7.5rem] w-[7.5rem]
+                ${msAccountMeta.minecraftMeta.cape == null ? "border border-green-400 bg-opacity-10" : "bg-opacity-5 focus:outline focus:outline-1"}`}>
+              <SkinCanvas></SkinCanvas>
+              <div className={`mt-2 text-sm truncate w-full flex justify-center
+                ${msAccountMeta.minecraftMeta.cape == null ? "font-semibold" : "text-stone-400"}`}>无披风
+              </div>
+            </button>
+            {msAccountMeta.minecraftMeta.capes.map((item: any) => (
+              <button
+                onDoubleClick={() => {
+                  if (window.electron.ipcRenderer.sendSync('mojangApi:putCape', Decrypt(msAccountMeta.accessToken), item.id))
+                    location.reload()
+                }}
+                disabled={item.state == "ACTIVE"}
+                className={`flex flex-col items-center pt-4 pb-2 transition-all bg-white hover:bg-opacity-10 max-w-[7.5rem] w-[7.5rem]
+                ${item.state == "ACTIVE" ? "border border-green-400 bg-opacity-10" : "bg-opacity-5 focus:outline focus:outline-1"}`}>
+                <SkinCanvas
+                  src={item.url} />
+                <div className={`mt-2 text-sm truncate w-full flex justify-center
+                ${item.state == "ACTIVE" ? "font-semibold" : "text-stone-400"}`}>{item.alias}</div>
+              </button>
+            ))}
+          </div>
 
-        </div>
-        <div className={`mt-10 flex gap-4 w-full items-start `}>
-
-          {msAccountMeta.minecraftMeta.capes.map((item: any) => (
-            <div className={`flex flex-col items-center px-7 pt-4 pb-2 bg-white bg-opacity-10 max-w-[7.5rem] w-[7.5rem]`}>
-              <SkinCanvas
-                src={item.url} />
-              <div className={`mt-1 text-sm truncate`}>{item.alias}</div>
-            </div>
-          ))}
         </div>
       </div>
 
@@ -49,7 +70,7 @@ const Skin = ({msAccountMeta}:{msAccountMeta:any}) => {
 }
 
 export const SkinCanvas = ({ src }: {
-  src: string;
+  src?: string;
 }) => {
 
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -62,14 +83,14 @@ export const SkinCanvas = ({ src }: {
 // 当图片加载完成后
   img.onload = function() {
 
-    const canvasItem = canvas.current
+    const canvasItem = canvas.current;
 
     if (canvasItem) {
       canvasItem.width = 80;
       canvasItem.height = 128;
 
       // 获取2D渲染上下文
-      const ctx = canvasItem.getContext('2d');
+      const ctx = canvasItem.getContext("2d");
 
       if (ctx) {
         ctx.imageSmoothingEnabled = false;
@@ -83,7 +104,7 @@ export const SkinCanvas = ({ src }: {
   };
 
 // 设置图片的src属性来开始加载图片
-  img.src = imageUrl;
+  if (imageUrl) img.src = imageUrl;
 
 
   return <canvas ref={canvas} className={`w-16 h-[6.4rem] bg-[#444444]`}></canvas>
