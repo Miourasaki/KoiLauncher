@@ -149,7 +149,7 @@ const getMicrosoftToken = (code: string): Promise<Map<string, string>> => {
       .catch(() => rejects('i18n|error.msAccount.failure'))
   })
 }
-const getMicrosoftTokenWithRefreshToken = (code: string): Promise<Map<string, string>> => {
+export const getMicrosoftTokenWithRefreshToken = (code: string): Promise<Map<string, string>> => {
   log('Minecraft Token get Program Start')
   return new Promise((resolve, rejects) => {
     const tokenMap = new Map<string, string>()
@@ -284,7 +284,7 @@ const getMinecraftProfile = (mcAccessToken: string): Promise<any> => {
   })
 }
 
-const getMinecraftToken = (msAccessToken: string): Promise<any> => {
+export const getMinecraftToken = (msAccessToken: string): Promise<any> => {
   return new Promise((resolve, reject) => {
     const headersGetXboxToken = new Headers()
     headersGetXboxToken.append('Content-Type', 'application/json')

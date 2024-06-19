@@ -1,7 +1,8 @@
 import { createContext } from 'react'
 import BarAccountComp from './BarAccountComp'
-import BarVersionComp from './BarVersionComp'
+import BarConfigureComp from './BarConfigureComp'
 import BarBottomComp from './BarBottomComp'
+import BarLink from "./BarLink";
 
 export const AppBarContext = createContext<any>(null)
 
@@ -12,8 +13,15 @@ const AppBar = (): JSX.Element => {
     >
       <div className={`w-full h-full flex-grow flex flex-col`}>
         <BarAccountComp />
-        <BarVersionComp />
-        <div className={`h-full w-full shadow-inner shadow-stone-950`}></div>
+        <BarConfigureComp />
+        <div className={`h-[calc(100vh-56.15rem)] flex-grow w-full shadow-inner shadow-stone-950 overflow-y-auto`}>
+
+          <BarLink to={`/app/versions`}>版本列表</BarLink>
+          <BarLink to={`/app/downloads`}>下载</BarLink>
+          <BarLink to={`/app/frp`}>内网映射</BarLink>
+          <BarLink to={`/app/configure/cid/options`} hash={`main`}>配置</BarLink>
+
+        </div>
       </div>
       <BarBottomComp />
     </div>

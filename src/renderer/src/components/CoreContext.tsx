@@ -19,20 +19,7 @@ const MainContextProvider = ({ children }: { children: ReactNode }) => {
     setAccountMeta(result)
     sessionStorage.setItem('accountMeta', btoa(JSON.stringify(result)))
     const uuid = msg.minecraftMeta.minecraftAccessMeta.profileMeta.id
-    const mcSkins: any[] = msg.minecraftMeta.minecraftAccessMeta.profileMeta.skins
-    let mcSkin: string | null = null
-    let index = 0
-    while (index < mcSkins.length) {
-      if (mcSkins[index]['state'] == 'ACTIVE') mcSkin = mcSkins[index]['url']
-      index++
-    }
-    const mcCapes: any[] = msg.minecraftMeta.minecraftAccessMeta.profileMeta.capes
-    let mcCape: string | null = null
-    index = 0
-    while (index < mcSkins.length) {
-      if (mcCapes[index]['state'] == 'ACTIVE') mcCape = mcCapes[index]['url']
-      index++
-    }
+
 
     const ownedList = []
     // @ts-ignore
@@ -44,9 +31,9 @@ const MainContextProvider = ({ children }: { children: ReactNode }) => {
       minecraftMeta: {
         id: uuid,
         name: msg.minecraftMeta.minecraftAccessMeta.profileMeta.name,
-        skin: mcSkin,
-        cape: mcCape,
-        capes: mcCapes,
+        // skin: mcSkin,
+        // cape: mcCape,
+        // capes: mcCapes,
       },
       ownedList: ownedList
     }

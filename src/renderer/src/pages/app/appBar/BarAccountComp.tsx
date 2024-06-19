@@ -23,11 +23,10 @@ const BarAccountComp = (): JSX.Element => {
     const [inputClass, setInputClass] = useState(false)
 
     return (
-      <MainCard classBool={classBool} onClose={() => changeChangeOfflineId(false)}>
+      <MainCard open={classBool} onClose={() => changeChangeOfflineId(false)}>
         <form
           onSubmit={(_) => {
             _.preventDefault()
-            if (accountType == 'offline') {
               // @ts-ignore
               const formData = new FormData(_.target)
               const newId = formData.get('id') + ''
@@ -70,18 +69,19 @@ const BarAccountComp = (): JSX.Element => {
                 return
               }
 
+            if (accountType == 'offline') {
               const result = JSON.parse(atob(sessionStorage.getItem('accountMeta') + ''))
               result.accountProfile.id = newId
               result.accountProfile.name = newId
-
+              sessionStorage.setItem('accountMeta', btoa(JSON.stringify(result)))
               setAccountName(newId)
+            }
+
               // @ts-ignore
               mainStorage.setItem('account.offlineAccount.id', newId)
-              sessionStorage.setItem('accountMeta', btoa(JSON.stringify(result)))
 
               changeChangeOfflineId(false)
               createNotification(Card.success, `设置离线id为 ${newId}`)
-            }
           }}
           className={`w-full h-full px-10 py-14 flex flex-col justify-between items-start`}
         >
@@ -103,16 +103,9 @@ const BarAccountComp = (): JSX.Element => {
     )
   }
   const [changeOfflineId, setChangeOfflineId] = useState(false)
-  const [changeOfflineIdClass, setChangeOfflineIdClass] = useState(false)
   const changeChangeOfflineId = (bool: boolean) => {
-    if (bool) {
-      setChangeOfflineIdClass(bool)
       setChangeOfflineId(bool)
-    } else {
-      setChangeOfflineIdClass(bool)
-      setTimeout(() => setChangeOfflineId(bool), 200)
-    }
-    setChangeOfflineIdMenu(bool)
+      setChangeOfflineIdMenu(bool)
   }
   const OfflineName = (): JSX.Element => {
     if (accountName == null)
@@ -274,7 +267,7 @@ const BarAccountComp = (): JSX.Element => {
           </div>
         )}
       </button>
-      {changeOfflineId && <ChangeOfflineName classBool={changeOfflineIdClass} />}
+      <ChangeOfflineName classBool={changeOfflineId} />
     </>
   )
 }

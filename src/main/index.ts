@@ -4,10 +4,12 @@ import { createWindow } from './mainWindow'
 import { aboutWindow, createAboutWindow, createLicenseWindow, licenseWindow } from './aboutWindow'
 import microsoftLogin, { getMinecraftProfileWithRefreshToken } from './microsoftLogin'
 import ElectronStore from 'electron-store'
+import { getMinecraftConfig } from "./minecraftConfig";
 
 const appData = app.getPath('appData')
 const realUserData = `${appData}/Koi Launcher`
 app.setPath('userData', `${app.getPath('temp')}/Koi Launcher`)
+console.log(process.cwd());
 // const exePath = app.getAppPath().slice(0, app.getAppPath().length - 8)
 
 // This method will be called when Electron has finished
@@ -48,10 +50,10 @@ loadStore().then((store) => {
 })
 
 app.whenReady().then(() => {
-  app.setProxy({
-    proxyRules: 'http=localhost:1080',
-    proxyBypassRules: 'localhost'
-  })
+  // app.setProxy({
+  //   proxyRules: 'http=localhost:1080',
+  //   proxyBypassRules: 'localhost'
+  // })
 
   // Set app user model id for windows
   electronApp.setAppUserModelId('net.miourasaki.koil')
@@ -71,6 +73,7 @@ app.whenReady().then(() => {
   // IPC test
   ipcMain.on('oauth:ms-in', microsoftLogin)
   ipcMain.on('auth:ms-in', getMinecraftProfileWithRefreshToken)
+  ipcMain.on('config:ms-get', getMinecraftConfig)
 
   ipcMain.on('window:openAbout', () => {
     if (!aboutWindow) createAboutWindow()

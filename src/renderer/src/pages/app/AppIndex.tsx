@@ -1,6 +1,7 @@
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { createContext, useEffect, useState } from 'react'
-import MainHeader from '../../components/mainHeader'
+// @ts-ignore
+import MainHeader from '../../components/MainHeader'
 import AppBar from './appBar/AppBar'
 import './comp/AppIndex.css'
 import AppOptions from './AppOptions'
@@ -28,7 +29,6 @@ const AppIndexPage = () => {
   const push = useNavigate()
 
   const [accountMeta, setAccountMeta] = useState<any>(null)
-
   const [accountName, setAccountName] = useState('')
   const [accountType, setAccountType] = useState('')
 
@@ -52,8 +52,8 @@ const AppIndexPage = () => {
   const Index = () => {
     return (
       <>
-        <div>{JSON.stringify(accountMeta)}</div>
-        <div>{location.pathname}</div>
+        {/*<div>{JSON.stringify(accountMeta)}</div>*/}
+        MAIN
       </>
     )
   }

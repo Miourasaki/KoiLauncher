@@ -1,14 +1,21 @@
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 const MainCard = ({
-  classBool,
+  open,
   onClose,
   children
 }: {
-  classBool: boolean
+  open: boolean
   onClose: () => void
   children?: ReactNode
 }) => {
+  const [classBool, setClassBool] = useState(true)
+
+  useEffect(() => {
+    if (open) setClassBool(true)
+    else setTimeout(() => setClassBool(false), 200)
+
+  }, [open]);
 
   useEffect(()=> {
 
@@ -24,23 +31,26 @@ const MainCard = ({
 
   },[])
 
-  return (
-    <div
-      onClick={onClose}
-      className={`loginFrom ${!classBool && 'loginTo'} flex justify-center items-center
-    w-full h-full absolute top-0 left-0 bg-stone-800 bg-opacity-75 backdrop-blur-sm z-30`}
-    >
+  if (open)
+    return (
       <div
-        onClick={(_) => {
-          _.stopPropagation()
-        }}
-        className={`min-w-[32rem] w-[32rem] min-h-[21rem] h-[21rem] flex items-center justify-center overflow-hidden text-white`}
-        style={{ background: 'rgb(33, 33, 33)' }}
+        onClick={onClose}
+        className={`${classBool ? 'loginFrom' : 'loginTo'} flex justify-center items-center
+      w-full h-full fixed -bottom-7 left-0 bg-stone-800 bg-opacity-75 backdrop-blur-sm z-30`}
       >
-        {children}
+        <div
+          onClick={(_) => {
+            _.stopPropagation()
+          }}
+          className={`min-w-[32rem] w-[32rem] min-h-[21rem] h-[21rem] flex items-center justify-center overflow-hidden text-white`}
+          style={{ background: 'rgb(33, 33, 33)' }}
+        >
+          {children}
+        </div>
       </div>
-    </div>
-  )
+    )
+
+  return <></>
 }
 
 export default MainCard

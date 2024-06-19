@@ -1,4 +1,4 @@
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from "react-router-dom";
 import { ReactNode } from 'react'
 
 const BarLink = ({
@@ -10,11 +10,12 @@ const BarLink = ({
 }: {
   to: string
   hash?: string
-  img: string | undefined
+  img?: string | undefined
   shadow?: boolean
   children: ReactNode
 }): JSX.Element => {
   const location = useLocation()
+  const push = useNavigate()
 
   const classBool = (): boolean => {
     return location.pathname == to
@@ -26,15 +27,18 @@ const BarLink = ({
   }
 
   return (
-    <Link
-      to={getPath()}
+    <button
+      onClick={()=> push(getPath()) }
+      disabled={classBool()}
       className={`relative w-full h-[3.7rem] border-stone-700 transition-all flex justify-between items-center px-4
       ${classBool() && shadow ? 'border-stone-700 border-y shadow-md shadow-stone-950' : 'hover:bg-white hover:bg-opacity-15'}`}
     >
       <div className={`flex items-center`}>
+        {img &&
         <img src={img} alt="" className={`w-7`} />
+        }
         <div
-          className={`ml-3.5 leading-5 flex flex-col items-start ${classBool() && 'font-medium'}`}
+          className={`${img && 'ml-3.5'} leading-5 flex flex-col items-start ${classBool() && 'font-medium'}`}
         >
           {children}
         </div>
@@ -44,7 +48,7 @@ const BarLink = ({
       <span
         className={`bg-[#c88f9b] absolute w-1 left-0 duration-100 transition-all ${classBool() ? 'h-2/5' : 'h-0'}`}
       ></span>
-    </Link>
+    </button>
   )
 }
 

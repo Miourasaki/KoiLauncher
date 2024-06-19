@@ -35,9 +35,10 @@ export function createWindow(): void {
 
 
   ipcMain.on('mojangApi:deleteCape', (_, token) => {
-    axios.delete('https://api.mojang.com/minecraft/profile/capes/active', {
+    axios.delete('https://api.minecraftservices.com/minecraft/profile/capes/active', {
       headers: {
         Authorization: `Bearer ${token}`,
+        'User-Agent': `KoiLauncher/${process.env.npm_package_version}`
       }
     }).then(() => {
       _.returnValue = true
@@ -47,11 +48,27 @@ export function createWindow(): void {
       })
   })
   ipcMain.on('mojangApi:putCape', (_, token,uuid) => {
-    axios.put('https://api.mojang.com/minecraft/profile/capes/active', {
+    axios.put('https://api.minecraftservices.com/minecraft/profile/capes/active', {
       capeId: uuid
     },{
       headers: {
         Authorization: `Bearer ${token}`,
+        'User-Agent': `KoiLauncher/${process.env.npm_package_version}`
+      }
+    }).then(() => {
+      _.returnValue = true
+    })
+      .catch(() => {
+        _.returnValue = false
+      })
+  })
+  ipcMain.on('mojangApi:changeSkin', (_, token,formData) => {
+
+
+    axios.put('https://api.minecraftservices.com/minecraft/profile/skins', formData,{
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'User-Agent': `KoiLauncher/${process.env.npm_package_version}`
       }
     }).then(() => {
       _.returnValue = true
@@ -64,6 +81,8 @@ export function createWindow(): void {
 
 
   mainWindow.on('maximize', () => {
+    mainWindow.webContents.send('window:alter', process.cwd())
+    mainWindow.webContents.send('window:alter', app.getAppPath())
     mainWindow.webContents.send('window:maximizeChange', true)
   })
   mainWindow.on('unmaximize', () => {
