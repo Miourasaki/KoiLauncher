@@ -108,7 +108,7 @@ const microsoftLogin = (event: Electron.IpcMainEvent): void => {
   }
 }
 const log = (s: string = ''): void => {
-  if (typeof s == 'string') console.log(s)
+  if (typeof s == 'boolean') console.log(s)
 }
 const getMicrosoftToken = (code: string): Promise<Map<string, string>> => {
   log('Minecraft Token get Program Start')
@@ -262,14 +262,13 @@ const getMinecraftProfile = (mcAccessToken: string): Promise<any> => {
       Authorization: `Bearer ${mcAccessToken}`,
       'User-Agent': `KoiLauncher/${process.env.npm_package_version}`
     }
+    setTimeout(() => {
       axios
         .get('https://api.minecraftservices.com/entitlements/mcstore', {
           headers: axiosHeader
         })
         .then((r) => {
-          if (r.data.items)
-            if (r.data.items.length <= 0) reject('i18n|error.msAccount.minecraft.notOwned')
-          else reject('i18n|error.msAccount.minecraft.failure')
+          if (r.data.items.length <= 0) reject('i18n|error.msAccount.minecraft.notOwned')
           axios
             .get('https://api.minecraftservices.com/minecraft/profile', {
               headers: axiosHeader
@@ -280,9 +279,10 @@ const getMinecraftProfile = (mcAccessToken: string): Promise<any> => {
                 profileMeta: pr.data
               })
             )
-            .catch(() => reject('i18n|error.msAccount.mojang.failure2'))
+            .catch(() => reject('i18n|error.msAccount.mojang.failure'))
         })
-        .catch(() => reject('i18n|error.msAccount.mojang.failure1'))
+        .catch(() => reject('i18n|error.msAccount.mojang.failure'))
+    }, 2000)
   })
 }
 
