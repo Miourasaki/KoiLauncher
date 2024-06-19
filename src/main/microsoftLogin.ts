@@ -262,7 +262,6 @@ const getMinecraftProfile = (mcAccessToken: string): Promise<any> => {
       Authorization: `Bearer ${mcAccessToken}`,
       'User-Agent': `KoiLauncher/${process.env.npm_package_version}`
     }
-    setTimeout(() => {
       axios
         .get('https://api.minecraftservices.com/entitlements/mcstore', {
           headers: axiosHeader
@@ -282,7 +281,6 @@ const getMinecraftProfile = (mcAccessToken: string): Promise<any> => {
             .catch(() => reject('i18n|error.msAccount.mojang.failure'))
         })
         .catch(() => reject('i18n|error.msAccount.mojang.failure'))
-    }, 2000)
   })
 }
 
