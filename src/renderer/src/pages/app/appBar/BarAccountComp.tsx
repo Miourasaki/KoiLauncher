@@ -211,7 +211,7 @@ const BarAccountComp = (): JSX.Element => {
 
         {accountMenu && (
           <div
-            className={`text-sm py-2 absolute w-10/12 accountMenu bg-[#131313] -bottom-2 translate-y-full shadow-stone-950 rounded-sm left-1/2 -translate-x-1/2 flex flex-col items-start justify-start ease-in z-10`}
+            className={`z-20 text-sm py-2 absolute w-10/12 accountMenu bg-[#131313] -bottom-2 translate-y-full shadow-stone-950 rounded-sm left-1/2 -translate-x-1/2 flex flex-col items-start justify-start ease-in z-10`}
           >
             <Link
               to={'/app/articles#faq'}

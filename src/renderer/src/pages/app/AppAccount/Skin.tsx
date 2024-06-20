@@ -125,7 +125,7 @@ const Skin = ({paramId}:{paramId:any}) => {
         <div className={`font-semibold`}>设置皮肤</div>
         <MainCard open={changSkin} onClose={()=> setChangSkin(false)} />
 
-        <AppButton onClick={() => setChangSkin(true)} className={`w-full h-20 mt-3`}>
+        <AppButton onClick={() => setChangSkin(true)} className={`w-full h-16 mt-3`}>
           <div className={`flex gap-3 items-center`}>
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor"
                  className="bi bi-arrow-up-circle-fill" viewBox="0 0 16 16">
