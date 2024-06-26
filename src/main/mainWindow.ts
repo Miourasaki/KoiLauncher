@@ -3,6 +3,7 @@ import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import axios from "axios";
+import { getMinecraftConfigure } from "./configure/getMinecraftConfigure";
 
 export let mainWindow: BrowserWindow
 
@@ -32,6 +33,11 @@ export function createWindow(): void {
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
   })
+
+
+  ipcMain.on('configure:getConfigure', getMinecraftConfigure)
+
+
 
 
   ipcMain.on('mojangApi:deleteCape', (_, token) => {
@@ -65,7 +71,7 @@ export function createWindow(): void {
   ipcMain.on('mojangApi:changeSkin', (_, token,formData) => {
 
 
-    axios.put('https://api.minecraftservices.com/minecraft/profile/skins', formData,{
+  axios.put('https://api.minecraftservices.com/minecraft/profile/skins', formData,{
       headers: {
         Authorization: `Bearer ${token}`,
         'User-Agent': `KoiLauncher/${process.env.npm_package_version}`

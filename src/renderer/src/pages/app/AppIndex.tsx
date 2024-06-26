@@ -7,6 +7,7 @@ import './comp/AppIndex.css'
 import AppOptions from './AppOptions'
 import AppArticles from './AppArticles'
 import AppAccount from "./AppAccount";
+import AppButton from "./comp/AppButton";
 
 export const AppContext = createContext<any>(null)
 
@@ -26,7 +27,10 @@ const AppIndexPage = () => {
     }
   }
 
+
+
   const push = useNavigate()
+
 
   const [accountMeta, setAccountMeta] = useState<any>(null)
   const [accountName, setAccountName] = useState('')
@@ -47,14 +51,23 @@ const AppIndexPage = () => {
         setAccountType(accountMeta.accountType)
       }
     } else push('/')
+
+    window.electron.ipcRenderer.send("configure:getConfigure")
   }, [])
+
+
 
   const Index = () => {
     return (
-      <>
+      <div  className={`w-full h-full`}>
         {/*<div>{JSON.stringify(accountMeta)}</div>*/}
+        <AppButton
+          className={`w-full h-full`}
+          onClick={() => {window.electron.ipcRenderer.send("configure:getConfigure")}}>
+          Send
+        </AppButton>
         MAIN
-      </>
+      </div>
     )
   }
 

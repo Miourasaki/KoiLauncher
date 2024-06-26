@@ -9,8 +9,8 @@ import { getMinecraftConfig } from "./minecraftConfig";
 const appData = app.getPath('appData')
 const realUserData = `${appData}/Koi Launcher`
 app.setPath('userData', `${app.getPath('temp')}/Koi Launcher`)
-console.log(process.cwd());
-// const exePath = app.getAppPath().slice(0, app.getAppPath().length - 8)
+// console.log(process.cwd());
+
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
