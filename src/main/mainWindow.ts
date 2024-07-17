@@ -87,8 +87,6 @@ export function createWindow(): void {
 
 
   mainWindow.on('maximize', () => {
-    mainWindow.webContents.send('window:alter', process.cwd())
-    mainWindow.webContents.send('window:alter', app.getAppPath())
     mainWindow.webContents.send('window:maximizeChange', true)
   })
   mainWindow.on('unmaximize', () => {

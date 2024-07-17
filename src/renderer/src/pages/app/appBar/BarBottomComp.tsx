@@ -20,7 +20,7 @@ const BarBottomComp = (): JSX.Element => {
       </BarLink>
       <div className={`h-5 w-full flex items-center justify-between text-xs px-2 text-stone-400`}>
         <div>v{version}</div>
-        <div>{location.pathname}</div>
+        {/*<div>{location.pathname}</div>*/}
       </div>
     </div>
   )
